@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, Pressable 
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
+import ChatBot from '../components/ChatBot';
 
 interface StatisticCardProps {
   title: string;
@@ -113,9 +114,9 @@ export default function Index() {
     { title: 'KAMU', value: 'ENERJİ, SANAYİ', subtitle: 'Üye Oranı En Düşük İşkolu' },
   ];
 
-  const handleMenuItemPress = (item: string) => {
-    console.log(item);
+  const handleMenuItemPress = (route: string) => {
     setDropdownVisible(false);
+    router.push(route);
   };
 
   return (
@@ -154,19 +155,19 @@ export default function Index() {
           <View style={[styles.dropdown, { top: 90, right: 20 }]}>
             <TouchableOpacity 
               style={styles.dropdownItem}
-              onPress={() => handleMenuItemPress('Sendikacı Girişi')}
+              onPress={() => handleMenuItemPress('/login/sendika')}
             >
               <Text style={styles.dropdownText}>Sendikacı Girişi</Text>
             </TouchableOpacity>
             <TouchableOpacity 
               style={styles.dropdownItem}
-              onPress={() => handleMenuItemPress('İşçi Girişi')}
+              onPress={() => handleMenuItemPress('/login/isci')}
             >
               <Text style={styles.dropdownText}>İşçi Girişi</Text>
             </TouchableOpacity>
             <TouchableOpacity 
               style={styles.dropdownItem}
-              onPress={() => handleMenuItemPress('Üye Ol')}
+              onPress={() => handleMenuItemPress('/register')}
             >
               <Text style={styles.dropdownText}>Üye Ol</Text>
             </TouchableOpacity>
@@ -204,6 +205,7 @@ export default function Index() {
         <View style={styles.tableSeparator} />
         <WorkSectorTable />
       </ScrollView>
+      <ChatBot />
     </View>
   );
 }

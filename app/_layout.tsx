@@ -24,6 +24,27 @@ export default function RootLayout() {
             title: 'Ana Sayfa'
           }}
         />
+        <Drawer.Screen 
+          name="login/sendika" 
+          options={{
+            drawerLabel: 'Sendikacı Girişi',
+            title: 'Sendikacı Girişi'
+          }}
+        />
+        <Drawer.Screen 
+          name="login/isci" 
+          options={{
+            drawerLabel: 'İşçi Girişi',
+            title: 'İşçi Girişi'
+          }}
+        />
+        <Drawer.Screen 
+          name="register" 
+          options={{
+            drawerLabel: 'Üye Ol',
+            title: 'Üye Ol'
+          }}
+        />
       </Drawer>
     </GestureHandlerRootView>
   );
