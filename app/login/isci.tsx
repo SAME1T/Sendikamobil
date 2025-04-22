@@ -48,7 +48,7 @@ export default function IsciLogin() {
         </TouchableOpacity>
 
         <View style={styles.linksContainer}>
-          <Link href="/forgot-password" style={styles.link}>Şifremi Unuttum</Link>
+          <Link href="/reset-password" style={styles.link}>Şifremi Unuttum</Link>
           <Text style={styles.separator}>|</Text>
           <Link href="/register" style={styles.link}>Üye Ol</Link>
           <Text style={styles.separator}>|</Text>
