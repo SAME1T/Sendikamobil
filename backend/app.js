@@ -47,8 +47,12 @@ app.post('/api/login', async (req, res) => {
         success: true,
         user: {
           id: user.id,
-          username: user.username,
-          email: user.email
+          ad: user.ad,
+          soyad: user.soyad,
+          rol: user.rol,
+          email: user.email,
+          telefon: user.telefon,
+          tc_no: user.tc_no
         }
       });
     } else {
@@ -64,6 +68,29 @@ app.post('/api/login', async (req, res) => {
       success: false,
       message: 'Sunucu hatası oluştu'
     });
+  }
+});
+
+// Kullanıcı kayıt endpoint'i
+app.post('/api/register', async (req, res) => {
+  const { ad, soyad, tc_no, telefon, email, password, rol } = req.body;
+  if (!ad || !soyad || !tc_no || !telefon || !email || !password || typeof rol !== 'number') {
+    return res.status(400).json({ success: false, message: 'Eksik bilgi var.' });
+  }
+  try {
+    // TC veya email zaten kayıtlı mı?
+    const exists = await pool.query('SELECT * FROM users WHERE tc_no = $1 OR email = $2', [tc_no, email]);
+    if (exists.rows.length > 0) {
+      return res.status(409).json({ success: false, message: 'Bu TC veya e-posta ile zaten kayıt var.' });
+    }
+    await pool.query(
+      'INSERT INTO users (ad, soyad, tc_no, telefon, email, password, rol) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+      [ad, soyad, tc_no, telefon, email, password, rol]
+    );
+    res.json({ success: true, message: 'Kayıt başarılı!' });
+  } catch (err) {
+    console.error('Register error:', err);
+    res.status(500).json({ success: false, message: 'Sunucu hatası.' });
   }
 });
 

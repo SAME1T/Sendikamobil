@@ -3,7 +3,6 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingVi
 import { Link, router } from 'expo-router';
 import AnimatedBackground from '../../components/AnimatedBackground';
 import LogoWithSlogan from '../../components/LogoWithSlogan';
-import Constants from 'expo-constants';
 
 export default function IsciLogin() {
   const [tcNo, setTcNo] = useState('');
@@ -16,43 +15,28 @@ export default function IsciLogin() {
       Alert.alert('Hata', 'TC Kimlik No ve şifre alanları boş bırakılamaz.');
       return;
     }
-
     if (tcNo.length !== 11) {
       Alert.alert('Hata', 'TC Kimlik No 11 haneli olmalıdır.');
       return;
     }
-
     setLoading(true);
     try {
-      // Expo için IP adresini ve portu düzeltiyoruz
-      const API_URL = 'http://172.20.10.2:3001/api/login';
-      
-      const response = await fetch(API_URL, {
+      const response = await fetch('http://172.20.10.2:3001/api/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          tc_no: tcNo,
-          password: password,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tc_no: tcNo, password })
       });
-
       const data = await response.json();
-
-      if (response.ok) {
-        // Giriş başarılı
-        Alert.alert('Başarılı', 'Giriş yapıldı!');
-        router.replace('/home'); // Artık anasayfaya yönlendir
-      } else {
-        // Giriş başarısız
-        Alert.alert('Hata', data.message || 'Giriş yapılamadı. TC No veya şifre hatalı.');
-      }
-    } catch (error) {
-      Alert.alert('Hata', 'Bağlantı hatası oluştu. Lütfen tekrar deneyin.');
-      console.error('Login error:', error);
-    } finally {
       setLoading(false);
+      if (response.ok && data.success) {
+        Alert.alert('Başarılı', 'Giriş yapıldı!');
+        router.replace('/home');
+      } else {
+        Alert.alert('Hata', data.message || 'TC Kimlik No veya şifre hatalı.');
+      }
+    } catch (err) {
+      setLoading(false);
+      Alert.alert('Hata', 'Sunucuya bağlanılamadı.');
     }
   };
 
@@ -70,7 +54,6 @@ export default function IsciLogin() {
         </View>
         <Text style={styles.title}>İşçi Girişi</Text>
         <Text style={styles.subtitle}>Hesabınıza giriş yapın</Text>
-
         <TextInput
           style={[styles.input, styles.inputText]}
           placeholder="TC Kimlik Numarası"
@@ -81,7 +64,6 @@ export default function IsciLogin() {
           maxLength={11}
           editable={!loading}
         />
-
         <TextInput
           ref={passwordInputRef}
           style={[styles.input, styles.inputText]}
@@ -92,7 +74,6 @@ export default function IsciLogin() {
           secureTextEntry
           editable={!loading}
         />
-
         <TouchableOpacity 
           style={[styles.loginButton, loading && styles.loginButtonDisabled]} 
           onPress={handleLogin}
@@ -100,7 +81,6 @@ export default function IsciLogin() {
         >
           <Text style={styles.loginButtonText}>{loading ? 'GİRİŞ YAPILIYOR...' : 'GİRİŞ YAP'}</Text>
         </TouchableOpacity>
-
         <View style={styles.linksContainer}>
           <Link href="/reset-password" style={styles.link}>Şifremi Unuttum</Link>
           <Text style={styles.separator}>|</Text>

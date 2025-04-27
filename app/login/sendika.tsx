@@ -4,51 +4,38 @@ import { Link, router } from 'expo-router';
 import AnimatedBackground from '../../components/AnimatedBackground';
 import LogoWithSlogan from '../../components/LogoWithSlogan';
 
+const users = [
+  { tc_no: '12345678901', password: 'admin123', rol: 0 },
+  { tc_no: '11122233344', password: 'isci123', rol: 1 },
+  { tc_no: '22233344455', password: 'sendika123', rol: 2 },
+];
+
 export default function SendikaLogin() {
   const [tcNo, setTcNo] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const passwordInputRef = useRef<TextInput>(null);
 
-  const handleLogin = async () => {
+  const handleLogin = () => {
     if (!tcNo || !password) {
       Alert.alert('Hata', 'TC Kimlik No ve şifre alanları boş bırakılamaz.');
       return;
     }
-
     if (tcNo.length !== 11) {
       Alert.alert('Hata', 'TC Kimlik No 11 haneli olmalıdır.');
       return;
     }
-
     setLoading(true);
-    try {
-      const API_URL = 'http://172.20.10.2:3001/api/login'; // Kendi IP adresinizi kullanın
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          tc_no: tcNo,
-          password: password,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
+    const user = users.find(u => u.tc_no === tcNo && u.password === password);
+    setTimeout(() => {
+      setLoading(false);
+      if (user) {
         Alert.alert('Başarılı', 'Giriş yapıldı!');
         router.replace('/home');
       } else {
-        Alert.alert('Hata', data.message || 'Giriş yapılamadı. TC No veya şifre hatalı.');
+        Alert.alert('Hata', 'TC Kimlik No veya şifre hatalı.');
       }
-    } catch (error) {
-      Alert.alert('Hata', 'Bağlantı hatası oluştu. Lütfen tekrar deneyin.');
-      console.error('Login error:', error);
-    } finally {
-      setLoading(false);
-    }
+    }, 700);
   };
 
   return (
@@ -65,7 +52,6 @@ export default function SendikaLogin() {
         </View>
         <Text style={styles.title}>Sendikacı Girişi</Text>
         <Text style={styles.subtitle}>Hesabınıza giriş yapın</Text>
-
         <TextInput
           style={[styles.input, styles.inputText]}
           placeholder="TC Kimlik Numarası"
@@ -76,7 +62,6 @@ export default function SendikaLogin() {
           maxLength={11}
           editable={!loading}
         />
-
         <TextInput
           ref={passwordInputRef}
           style={[styles.input, styles.inputText]}
@@ -87,7 +72,6 @@ export default function SendikaLogin() {
           secureTextEntry
           editable={!loading}
         />
-
         <TouchableOpacity 
           style={[styles.loginButton, loading && styles.loginButtonDisabled]} 
           onPress={handleLogin}
@@ -95,7 +79,6 @@ export default function SendikaLogin() {
         >
           <Text style={styles.loginButtonText}>{loading ? 'GİRİŞ YAPILIYOR...' : 'GİRİŞ YAP'}</Text>
         </TouchableOpacity>
-
         <View style={styles.linksContainer}>
           <Link href="/reset-password" style={styles.link}>Şifremi Unuttum</Link>
           <Text style={styles.separator}>|</Text>

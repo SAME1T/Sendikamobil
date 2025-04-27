@@ -1,8 +1,15 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
-import { Link, useLocalSearchParams } from 'expo-router';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native';
+import { Link, useLocalSearchParams, router } from 'expo-router';
 import AnimatedBackground from '../components/AnimatedBackground';
 import LogoWithSlogan from '../components/LogoWithSlogan';
+
+// Local kullanıcı listesi (gerçek uygulamada global state veya API ile yapılmalı)
+const users = [
+  { tc_no: '12345678901', password: 'admin123', rol: 0 },
+  { tc_no: '11122233344', password: 'isci123', rol: 1 },
+  { tc_no: '22233344455', password: 'sendika123', rol: 2 },
+];
 
 export default function Register() {
   const params = useLocalSearchParams();
@@ -26,9 +33,46 @@ export default function Register() {
     confirmPassword: useRef<TextInput>(null),
   };
 
-  const handleRegister = () => {
-    // Register logic will be implemented here
-    console.log('Register attempt:', formData);
+  const handleRegister = async () => {
+    // Form validasyonu
+    if (!formData.tcNo || !formData.name || !formData.surname || !formData.email || !formData.phone || !formData.password || !formData.confirmPassword) {
+      Alert.alert('Hata', 'Tüm alanları doldurun.');
+      return;
+    }
+    if (formData.tcNo.length !== 11) {
+      Alert.alert('Hata', 'TC Kimlik No 11 haneli olmalı.');
+      return;
+    }
+    if (formData.password !== formData.confirmPassword) {
+      Alert.alert('Hata', 'Şifreler eşleşmiyor.');
+      return;
+    }
+    try {
+      const response = await fetch('http://172.20.10.2:3001/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ad: formData.name,
+          soyad: formData.surname,
+          tc_no: formData.tcNo,
+          telefon: formData.phone,
+          email: formData.email,
+          password: formData.password,
+          rol: 1
+        })
+      });
+      const data = await response.json();
+      if (response.ok && data.success) {
+        Alert.alert('Başarılı', 'Kayıt başarıyla oluşturuldu!');
+        setTimeout(() => {
+          router.replace('/login/isci');
+        }, 700);
+      } else {
+        Alert.alert('Hata', data.message || 'Kayıt sırasında bir hata oluştu.');
+      }
+    } catch (err) {
+      Alert.alert('Hata', 'Sunucuya bağlanılamadı.');
+    }
   };
 
   const updateFormData = (key: string, value: string) => {

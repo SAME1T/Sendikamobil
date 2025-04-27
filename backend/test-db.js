@@ -10,21 +10,25 @@ async function testConnection() {
         await pool.query(`
             CREATE TABLE users (
                 id SERIAL PRIMARY KEY,
+                ad VARCHAR(50) NOT NULL,
+                soyad VARCHAR(50) NOT NULL,
                 tc_no VARCHAR(11) UNIQUE NOT NULL,
-                username VARCHAR(50) UNIQUE NOT NULL,
+                telefon VARCHAR(20) NOT NULL,
                 email VARCHAR(100) UNIQUE NOT NULL,
                 password VARCHAR(100) NOT NULL,
+                rol INTEGER NOT NULL, -- 0: admin, 1: işçi, 2: sendikacı
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         `);
-        console.log('Users tablosu başarıyla oluşturuldu!');
+        console.log('Yeni users tablosu oluşturuldu!');
 
-        // Örnek veri ekleyelim
+        // Örnek veriler ekleyelim
         await pool.query(`
-            INSERT INTO users (tc_no, username, email, password)
+            INSERT INTO users (ad, soyad, tc_no, telefon, email, password, rol)
             VALUES 
-                ('12345678901', 'test_user', 'test@example.com', '123456'),
-                ('98765432109', 'admin', 'admin@example.com', '111111')
+                ('Ahmet', 'Yılmaz', '12345678901', '5551112233', 'admin@example.com', 'admin123', 0),
+                ('Mehmet', 'Kaya', '11122233344', '5552223344', 'isci@example.com', 'isci123', 1),
+                ('Ayşe', 'Demir', '22233344455', '5553334455', 'sendikaci@example.com', 'sendika123', 2)
             ON CONFLICT (tc_no) DO NOTHING;
         `);
         console.log('Örnek veriler eklendi!');
