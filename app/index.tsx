@@ -136,7 +136,7 @@ export default function Index() {
         </Text>
         <TouchableOpacity 
           style={styles.loginButton}
-          onPress={() => setDropdownVisible(true)}
+          onPress={() => router.push('/giris-secimi')}
         >
           <Text style={styles.loginButtonText}>Giriş Yap</Text>
         </TouchableOpacity>

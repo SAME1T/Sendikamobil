@@ -1,54 +1,80 @@
-<<<<<<< HEAD
-# Welcome to your Expo app 👋
+# Sendika Mobil Uygulaması
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## Proje Hakkında
+Sendika Mobil, işçiler ve sendikacılar için geliştirilmiş bir mobil uygulama. Uygulama, işçi hakları ve sendika iletişimini kolaylaştırmak amacıyla tasarlanmıştır.
 
-## Get started
+## Özellikler
+- İşçi ve Sendikacı girişi
+- Üye olma sistemi
+- Şifre sıfırlama
+- Anket oluşturma ve yönetme
+- Duyuru sistemi
+- Etkinlik takvimi
+- İletişim araçları
 
-1. Install dependencies
+## Kullanılan Teknolojiler
+- **React Native**: Mobil uygulama geliştirme framework'ü
+- **Expo**: React Native uygulamaları için geliştirme platformu
+- **TypeScript**: Tip güvenliği sağlayan JavaScript süper seti
+- **React Navigation**: Sayfa yönlendirme ve navigasyon
+- **React Native Gesture Handler**: Dokunma ve hareket işlemleri
+- **Expo Router**: Dosya tabanlı yönlendirme sistemi
 
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
+## Kurulum
+1. Projeyi klonlayın:
 ```bash
-npm run reset-project
+git clone [repo-url]
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+2. Bağımlılıkları yükleyin:
+```bash
+npm install
+```
 
-## Learn more
+3. Uygulamayı başlatın:
+```bash
+npm start
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+## Proje Yapısı
+```
+sendika-mobil/
+├── app/                    # Sayfa bileşenleri
+│   ├── login/             # Giriş sayfaları
+│   ├── register.tsx       # Üye olma sayfası
+│   └── ...
+├── components/            # Yeniden kullanılabilir bileşenler
+├── assets/               # Görseller ve diğer kaynaklar
+└── ...
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Son Yapılan Güncellemeler
+1. **Klavye Yönetimi İyileştirmeleri**
+   - Klavye açıldığında içeriğin otomatik kaydırılması
+   - Form alanlarının klavye ile uyumlu çalışması
+   - Gereksiz klavye butonlarının kaldırılması
 
-## Join the community
+2. **Kod Kalitesi İyileştirmeleri**
+   - TypeScript tip güvenliği
+   - Bileşen yapısının sadeleştirilmesi
+   - Performans optimizasyonları
 
-Join our community of developers creating universal apps.
+3. **Kullanıcı Deneyimi İyileştirmeleri**
+   - Daha akıcı geçişler
+   - Daha iyi hata yönetimi
+   - Kullanıcı dostu arayüz
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
-=======
-# Sendikamobil
->>>>>>> bfb403c4fe2bf2db72f10808d9c23cf76c263d7d
+## Katkıda Bulunma
+1. Fork edin
+2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
+3. Değişikliklerinizi commit edin (`git commit -m 'Add some amazing feature'`)
+4. Branch'inizi push edin (`git push origin feature/amazing-feature`)
+5. Pull Request açın
+
+## Lisans
+Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakın.
+
+## İletişim
+Proje Sahibi - [@your-twitter](https://twitter.com/your-twitter)
+
+Proje Linki: [https://github.com/yourusername/sendika-mobil](https://github.com/yourusername/sendika-mobil)

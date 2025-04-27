@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import { Link } from 'expo-router';
+import React, { useState, useRef } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { Link, useLocalSearchParams } from 'expo-router';
 import AnimatedBackground from '../components/AnimatedBackground';
 import LogoWithSlogan from '../components/LogoWithSlogan';
 
 export default function Register() {
+  const params = useLocalSearchParams();
+  const role = params.role;
   const [formData, setFormData] = useState({
     tcNo: '',
     name: '',
@@ -15,6 +17,15 @@ export default function Register() {
     confirmPassword: '',
   });
 
+  const inputRefs = {
+    name: useRef<TextInput>(null),
+    surname: useRef<TextInput>(null),
+    email: useRef<TextInput>(null),
+    phone: useRef<TextInput>(null),
+    password: useRef<TextInput>(null),
+    confirmPassword: useRef<TextInput>(null),
+  };
+
   const handleRegister = () => {
     // Register logic will be implemented here
     console.log('Register attempt:', formData);
@@ -24,16 +35,29 @@ export default function Register() {
     setFormData(prev => ({ ...prev, [key]: value }));
   };
 
+  const focusNextInput = (nextKey: keyof typeof inputRefs) => {
+    inputRefs[nextKey].current?.focus();
+  };
+
   return (
-    <View style={styles.mainContainer}>
+    <KeyboardAvoidingView 
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.mainContainer}
+    >
       <AnimatedBackground />
-      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent}>
+      <ScrollView 
+        style={styles.scrollView} 
+        contentContainerStyle={styles.scrollViewContent}
+        keyboardShouldPersistTaps="handled"
+      >
         <LogoWithSlogan />
         <View style={styles.card}>
           <View style={styles.iconContainer}>
             <Text style={styles.iconText}>📝</Text>
           </View>
-          <Text style={styles.title}>Üye Ol</Text>
+          <Text style={styles.title}>
+            {role === 'isci' ? 'İşçi Üyeliği' : role === 'sendikaci' ? 'Sendikacı Üyeliği' : 'Üye Ol'}
+          </Text>
           <Text style={styles.subtitle}>Yeni hesap oluşturun</Text>
 
           <TextInput
@@ -47,6 +71,7 @@ export default function Register() {
           />
 
           <TextInput
+            ref={inputRefs.name}
             style={[styles.input, styles.inputText]}
             placeholder="Ad"
             placeholderTextColor="#666"
@@ -55,6 +80,7 @@ export default function Register() {
           />
 
           <TextInput
+            ref={inputRefs.surname}
             style={[styles.input, styles.inputText]}
             placeholder="Soyad"
             placeholderTextColor="#666"
@@ -63,6 +89,7 @@ export default function Register() {
           />
 
           <TextInput
+            ref={inputRefs.email}
             style={[styles.input, styles.inputText]}
             placeholder="E-posta"
             placeholderTextColor="#666"
@@ -73,6 +100,7 @@ export default function Register() {
           />
 
           <TextInput
+            ref={inputRefs.phone}
             style={[styles.input, styles.inputText]}
             placeholder="Telefon"
             placeholderTextColor="#666"
@@ -82,6 +110,7 @@ export default function Register() {
           />
 
           <TextInput
+            ref={inputRefs.password}
             style={[styles.input, styles.inputText]}
             placeholder="Şifre"
             placeholderTextColor="#666"
@@ -91,6 +120,7 @@ export default function Register() {
           />
 
           <TextInput
+            ref={inputRefs.confirmPassword}
             style={[styles.input, styles.inputText]}
             placeholder="Şifre Tekrar"
             placeholderTextColor="#666"
@@ -112,13 +142,14 @@ export default function Register() {
           </View>
         </View>
       </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
+    backgroundColor: '#1a2942',
   },
   scrollView: {
     flex: 1,
@@ -126,9 +157,7 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     flexGrow: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 40,
-    paddingHorizontal: 20,
+    paddingVertical: 20,
   },
   card: {
     backgroundColor: 'white',
