@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-export default function Anketler() {
+export default function Duyurular() {
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Anketler</Text>
+      <Text style={styles.header}>Duyurular</Text>
     </View>
   );
 }

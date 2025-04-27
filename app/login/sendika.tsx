@@ -3,11 +3,12 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingVi
 import { Link, router } from 'expo-router';
 import AnimatedBackground from '../../components/AnimatedBackground';
 import LogoWithSlogan from '../../components/LogoWithSlogan';
+import { Ionicons } from '@expo/vector-icons';
 
 const users = [
-  { tc_no: '12345678901', password: 'admin123', rol: 0 },
-  { tc_no: '11122233344', password: 'isci123', rol: 1 },
-  { tc_no: '22233344455', password: 'sendika123', rol: 2 },
+  { tc_no: '12345678901', password: 'admin123', rol: 0, ad: 'Admin', soyad: 'Yönetici' },
+  { tc_no: '11122233344', password: 'isci123', rol: 1, ad: 'Mehmet', soyad: 'Çelik' },
+  { tc_no: '22233344455', password: 'sendika123', rol: 2, ad: 'Ayşe', soyad: 'Demir' },
 ];
 
 export default function SendikaLogin() {
@@ -31,7 +32,7 @@ export default function SendikaLogin() {
       setLoading(false);
       if (user) {
         Alert.alert('Başarılı', 'Giriş yapıldı!');
-        router.replace('/home');
+        router.replace(`/home?ad=${encodeURIComponent(user.ad)}&soyad=${encodeURIComponent(user.soyad)}`);
       } else {
         Alert.alert('Hata', 'TC Kimlik No veya şifre hatalı.');
       }

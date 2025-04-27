@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingVi
 import { Link, router } from 'expo-router';
 import AnimatedBackground from '../../components/AnimatedBackground';
 import LogoWithSlogan from '../../components/LogoWithSlogan';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function IsciLogin() {
   const [tcNo, setTcNo] = useState('');
@@ -30,7 +31,7 @@ export default function IsciLogin() {
       setLoading(false);
       if (response.ok && data.success) {
         Alert.alert('Başarılı', 'Giriş yapıldı!');
-        router.replace('/home');
+        router.replace(`/home?ad=${encodeURIComponent(data.user.ad)}&soyad=${encodeURIComponent(data.user.soyad)}`);
       } else {
         Alert.alert('Hata', data.message || 'TC Kimlik No veya şifre hatalı.');
       }

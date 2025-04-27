@@ -1,133 +1,193 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { router, useLocalSearchParams } from 'expo-router';
+import AnimatedBackground from '../components/AnimatedBackground';
+
+const announcements = [
+  { id: 1, title: 'Aidat Ödemeleri Başladı', date: '2024-06-01' },
+  { id: 2, title: "Genel Kurul Toplantısı 15 Haziran'da", date: '2024-06-15' },
+  { id: 3, title: 'Yeni İş Güvenliği Eğitimi', date: '2024-06-20' },
+];
 
 export default function Home() {
+  const params = useLocalSearchParams();
+  const ad = params.ad || '';
+  const soyad = params.soyad || '';
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <Text style={styles.header}>Hoş Geldiniz, Ahmet!</Text>
-      <Text style={styles.subHeader}>Sendika İletişim Merkezi üye paneline hoş geldiniz.</Text>
-
-      <View style={styles.cardsRow}>
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Aktif Anketler</Text>
-          <Text style={styles.cardValue}>3</Text>
-          <Text style={styles.cardSub}>1 yeni anket var</Text>
+    <View style={{ flex: 1 }}>
+      <AnimatedBackground />
+      <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+        <View style={styles.headerBox}>
+          <Text style={styles.header}>Hoş Geldiniz!</Text>
+          {(ad || soyad) && (
+            <Text style={styles.name}>{ad} {soyad}</Text>
+          )}
+          <Text style={styles.subHeader}>Sendika İletişim Merkezi üye paneline hoş geldiniz.</Text>
         </View>
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>İletilerim</Text>
-          <Text style={styles.cardValue}>5</Text>
-          <Text style={styles.cardSub}>2 yanıt bekleyen ileti</Text>
+        <View style={styles.announcementSection}>
+          <Text style={styles.announcementHeader}>Haber ve Duyurular</Text>
+          {announcements.map((item) => (
+            <View key={item.id} style={styles.announcementCard}>
+              <Text style={styles.announcementTitle}>{item.title}</Text>
+              <Text style={styles.announcementDate}>{item.date}</Text>
+            </View>
+          ))}
         </View>
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Duyurular</Text>
-          <Text style={styles.cardValue}>8</Text>
-          <Text style={styles.cardSub}>3 yeni duyuru</Text>
+        <View style={styles.menuGrid}>
+          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/anketler')}>
+            <View style={styles.menuIconBg}><Ionicons name="list-circle" size={32} color="#fff" /></View>
+            <Text style={styles.menuLabel}>Anketler</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/grev-kartlari')}>
+            <View style={styles.menuIconBg}><Ionicons name="card" size={32} color="#fff" /></View>
+            <Text style={styles.menuLabel}>Grev Kartları</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/toplantilar')}>
+            <View style={styles.menuIconBg}><Ionicons name="people" size={32} color="#fff" /></View>
+            <Text style={styles.menuLabel}>Toplantılar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/eylem-planlari')}>
+            <View style={styles.menuIconBg}><Ionicons name="alert-circle" size={32} color="#fff" /></View>
+            <Text style={styles.menuLabel}>Eylem Planları</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/duyurular')}>
+            <View style={styles.menuIconBg}><Ionicons name="megaphone" size={32} color="#fff" /></View>
+            <Text style={styles.menuLabel}>Duyurular</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/iletisim')}>
+            <View style={styles.menuIconBg}><Ionicons name="call" size={32} color="#fff" /></View>
+            <Text style={styles.menuLabel}>İletişim</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/etkinlikler')}>
+            <View style={styles.menuIconBg}><Ionicons name="calendar" size={32} color="#fff" /></View>
+            <Text style={styles.menuLabel}>Etkinlikler</Text>
+          </TouchableOpacity>
         </View>
-      </View>
-
-      <View style={styles.sectionsRow}>
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Son Aktiviteler</Text>
-          <Text style={styles.activity}>✔️ "İş Güvenliği" anketini doldurdunuz</Text>
-          <Text style={styles.activity}>📧 Yeni bir ileti gönderdiniz</Text>
-          <Text style={styles.activity}>🔔 2 yeni duyuru okundu</Text>
-        </View>
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Yaklaşan Etkinlikler</Text>
-          <Text style={styles.activity}>📅 Üye Toplantısı - 15 Mayıs</Text>
-          <Text style={styles.activity}>🎓 İş Güvenliği Eğitimi - 20 Mayıs</Text>
-          <Text style={styles.activity}>🎉 Sosyal Etkinlik - 25 Mayıs</Text>
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f4f6fa',
+    backgroundColor: 'linear-gradient(180deg, #e3f0ff 0%, #f4f6fa 100%)',
   },
   content: {
     padding: 20,
     alignItems: 'center',
+    paddingBottom: 40,
+  },
+  headerBox: {
+    width: '100%',
+    backgroundColor: '#fff',
+    borderRadius: 18,
+    padding: 24,
+    marginBottom: 18,
+    alignItems: 'center',
+    shadowColor: '#007aff',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 3,
   },
   header: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: 'bold',
     color: '#007aff',
-    marginTop: 20,
-    marginBottom: 5,
+    marginBottom: 6,
+    textAlign: 'center',
+  },
+  name: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#007aff',
+    marginBottom: 4,
     textAlign: 'center',
   },
   subHeader: {
     fontSize: 16,
-    color: '#333',
-    marginBottom: 20,
+    color: '#444',
+    marginBottom: 0,
     textAlign: 'center',
   },
-  cardsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  announcementSection: {
     width: '100%',
-    marginBottom: 20,
-  },
-  card: {
-    flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: '#f8fbff',
     borderRadius: 16,
     padding: 20,
-    marginHorizontal: 5,
-    alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: '#007aff',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
+    elevation: 2,
+    marginBottom: 22,
   },
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 8,
-  },
-  cardValue: {
-    fontSize: 32,
+  announcementHeader: {
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#007aff',
+    marginBottom: 14,
+    textAlign: 'center',
   },
-  cardSub: {
+  announcementCard: {
+    marginBottom: 12,
+    paddingBottom: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e3e9f0',
+  },
+  announcementTitle: {
+    fontSize: 15,
+    color: '#222',
+    fontWeight: '600',
+  },
+  announcementDate: {
     fontSize: 12,
     color: '#888',
-    marginTop: 4,
+    marginTop: 2,
   },
-  sectionsRow: {
+  menuGrid: {
     flexDirection: 'row',
-    width: '100%',
-    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginTop: 10,
+    gap: 10,
   },
-  section: {
-    flex: 1,
-    backgroundColor: 'white',
-    borderRadius: 16,
-    padding: 20,
-    marginHorizontal: 5,
-    marginBottom: 20,
-    shadowColor: '#000',
+  menuItem: {
+    width: 104,
+    height: 120,
+    backgroundColor: '#fff',
+    borderRadius: 18,
+    margin: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#007aff',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 2,
+    padding: 8,
   },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 10,
+  menuIconBg: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: '#007aff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 8,
+    shadowColor: '#007aff',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.12,
+    shadowRadius: 8,
+    elevation: 2,
   },
-  activity: {
+  menuLabel: {
+    marginTop: 2,
     fontSize: 14,
-    color: '#444',
-    marginBottom: 6,
+    color: '#007aff',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 }); 
