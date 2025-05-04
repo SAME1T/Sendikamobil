@@ -4,6 +4,7 @@ import { Link, router } from 'expo-router';
 import AnimatedBackground from '../../components/AnimatedBackground';
 import LogoWithSlogan from '../../components/LogoWithSlogan';
 import { Ionicons } from '@expo/vector-icons';
+import api from '../../services/api';
 
 export default function IsciLogin() {
   const [tcNo, setTcNo] = useState('');
@@ -22,22 +23,17 @@ export default function IsciLogin() {
     }
     setLoading(true);
     try {
-      const response = await fetch('http://172.20.10.2:3001/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tc_no: tcNo, password })
-      });
-      const data = await response.json();
-      setLoading(false);
-      if (response.ok && data.success) {
+      const data = await api.login(tcNo, password);
+      if (data.success) {
         Alert.alert('Başarılı', 'Giriş yapıldı!');
-        router.replace(`/home?ad=${encodeURIComponent(data.user.ad)}&soyad=${encodeURIComponent(data.user.soyad)}`);
+        router.replace(`/home?ad=${encodeURIComponent(data.user.ad)}&soyad=${encodeURIComponent(data.user.soyad)}&role=1`);
       } else {
         Alert.alert('Hata', data.message || 'TC Kimlik No veya şifre hatalı.');
       }
     } catch (err) {
-      setLoading(false);
       Alert.alert('Hata', 'Sunucuya bağlanılamadı.');
+    } finally {
+      setLoading(false);
     }
   };
 

@@ -4,6 +4,7 @@ import { Link, router } from 'expo-router';
 import AnimatedBackground from '../../components/AnimatedBackground';
 import LogoWithSlogan from '../../components/LogoWithSlogan';
 import { Ionicons } from '@expo/vector-icons';
+import api from '../../services/api';
 
 const users = [
   { tc_no: '12345678901', password: 'admin123', rol: 0, ad: 'Admin', soyad: 'Yönetici' },
@@ -17,7 +18,7 @@ export default function SendikaLogin() {
   const [loading, setLoading] = useState(false);
   const passwordInputRef = useRef<TextInput>(null);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!tcNo || !password) {
       Alert.alert('Hata', 'TC Kimlik No ve şifre alanları boş bırakılamaz.');
       return;
@@ -27,16 +28,19 @@ export default function SendikaLogin() {
       return;
     }
     setLoading(true);
-    const user = users.find(u => u.tc_no === tcNo && u.password === password);
-    setTimeout(() => {
-      setLoading(false);
-      if (user) {
+    try {
+      const data = await api.login(tcNo, password);
+      if (data.success) {
         Alert.alert('Başarılı', 'Giriş yapıldı!');
-        router.replace(`/home?ad=${encodeURIComponent(user.ad)}&soyad=${encodeURIComponent(user.soyad)}`);
+        router.replace(`/home?ad=${encodeURIComponent(data.user.ad)}&soyad=${encodeURIComponent(data.user.soyad)}&role=2`);
       } else {
-        Alert.alert('Hata', 'TC Kimlik No veya şifre hatalı.');
+        Alert.alert('Hata', data.message || 'TC Kimlik No veya şifre hatalı.');
       }
-    }, 700);
+    } catch (err) {
+      Alert.alert('Hata', 'Sunucuya bağlanılamadı.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

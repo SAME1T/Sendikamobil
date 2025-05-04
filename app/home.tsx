@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import AnimatedBackground from '../components/AnimatedBackground';
+import ChatBot from '../components/ChatBot';
 
 const announcements = [
   { id: 1, title: 'Aidat Ödemeleri Başladı', date: '2024-06-01' },
@@ -14,6 +15,15 @@ export default function Home() {
   const params = useLocalSearchParams();
   const ad = params.ad || '';
   const soyad = params.soyad || '';
+  const role = Number(params.role) || 1;
+
+  const handleLogout = () => {
+    Alert.alert('Çıkış Yap', 'Oturumdan çıkmak istediğinize emin misiniz?', [
+      { text: 'İptal', style: 'cancel' },
+      { text: 'Çıkış Yap', style: 'destructive', onPress: () => router.replace('/') }
+    ]);
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <AnimatedBackground />
@@ -63,8 +73,24 @@ export default function Home() {
             <View style={styles.menuIconBg}><Ionicons name="calendar" size={32} color="#fff" /></View>
             <Text style={styles.menuLabel}>Etkinlikler</Text>
           </TouchableOpacity>
+          {role === 2 ? (
+            <TouchableOpacity style={styles.menuItem} onPress={() => router.push({ pathname: '/bordro-yonetimi' })}>
+              <View style={styles.menuIconBg}><Ionicons name="document-text" size={32} color="#fff" /></View>
+              <Text style={styles.menuLabel}>Bordro Yönetimi</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity style={styles.menuItem} onPress={() => router.push({ pathname: '/bordrolarim' })}>
+              <View style={styles.menuIconBg}><Ionicons name="document-text" size={32} color="#fff" /></View>
+              <Text style={styles.menuLabel}>Bordrolarım</Text>
+            </TouchableOpacity>
+          )}
         </View>
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <Ionicons name="log-out-outline" size={24} color="#fff" style={{ marginRight: 8 }} />
+          <Text style={styles.logoutButtonText}>Çıkış Yap</Text>
+        </TouchableOpacity>
       </ScrollView>
+      <ChatBot />
     </View>
   );
 }
@@ -77,14 +103,15 @@ const styles = StyleSheet.create({
   content: {
     padding: 20,
     alignItems: 'center',
-    paddingBottom: 40,
+    paddingBottom: 60,
+    paddingTop: 40,
   },
   headerBox: {
     width: '100%',
     backgroundColor: '#fff',
     borderRadius: 18,
-    padding: 24,
-    marginBottom: 18,
+    padding: 28,
+    marginBottom: 28,
     alignItems: 'center',
     shadowColor: '#007aff',
     shadowOffset: { width: 0, height: 2 },
@@ -96,14 +123,14 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: 'bold',
     color: '#007aff',
-    marginBottom: 6,
+    marginBottom: 10,
     textAlign: 'center',
   },
   name: {
     fontSize: 22,
     fontWeight: 'bold',
     color: '#007aff',
-    marginBottom: 4,
+    marginBottom: 8,
     textAlign: 'center',
   },
   subHeader: {
@@ -122,7 +149,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.06,
     shadowRadius: 6,
     elevation: 2,
-    marginBottom: 22,
+    marginBottom: 28,
   },
   announcementHeader: {
     fontSize: 20,
@@ -151,8 +178,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    marginTop: 10,
+    marginTop: 18,
     gap: 10,
+    marginBottom: 30,
   },
   menuItem: {
     width: 104,
@@ -189,5 +217,28 @@ const styles = StyleSheet.create({
     color: '#007aff',
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  logoutButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#ff3b30',
+    borderRadius: 16,
+    paddingVertical: 14,
+    paddingHorizontal: 32,
+    marginTop: 10,
+    marginBottom: 18,
+    alignSelf: 'center',
+    shadowColor: '#ff3b30',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.12,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  logoutButtonText: {
+    color: '#fff',
+    fontSize: 17,
+    fontWeight: 'bold',
+    letterSpacing: 0.5,
   },
 }); 

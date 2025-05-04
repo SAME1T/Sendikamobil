@@ -3,17 +3,12 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Keyboa
 import { Link, useLocalSearchParams, router } from 'expo-router';
 import AnimatedBackground from '../components/AnimatedBackground';
 import LogoWithSlogan from '../components/LogoWithSlogan';
-
-// Local kullanıcı listesi (gerçek uygulamada global state veya API ile yapılmalı)
-const users = [
-  { tc_no: '12345678901', password: 'admin123', rol: 0 },
-  { tc_no: '11122233344', password: 'isci123', rol: 1 },
-  { tc_no: '22233344455', password: 'sendika123', rol: 2 },
-];
+import api from '../services/api';
 
 export default function Register() {
   const params = useLocalSearchParams();
-  const role = params.role;
+  // role parametresi string olarak gelir, sendikaci ise 2, isci ise 1
+  const role = params.role === 'sendikaci' ? 2 : 1;
   const [formData, setFormData] = useState({
     tcNo: '',
     name: '',
@@ -34,7 +29,6 @@ export default function Register() {
   };
 
   const handleRegister = async () => {
-    // Form validasyonu
     if (!formData.tcNo || !formData.name || !formData.surname || !formData.email || !formData.phone || !formData.password || !formData.confirmPassword) {
       Alert.alert('Hata', 'Tüm alanları doldurun.');
       return;
@@ -48,24 +42,23 @@ export default function Register() {
       return;
     }
     try {
-      const response = await fetch('http://172.20.10.2:3001/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ad: formData.name,
-          soyad: formData.surname,
-          tc_no: formData.tcNo,
-          telefon: formData.phone,
-          email: formData.email,
-          password: formData.password,
-          rol: 1
-        })
+      const data = await api.register({
+        ad: formData.name,
+        soyad: formData.surname,
+        tc_no: formData.tcNo,
+        telefon: formData.phone,
+        email: formData.email,
+        password: formData.password,
+        rol: role
       });
-      const data = await response.json();
-      if (response.ok && data.success) {
+      if (data.success) {
         Alert.alert('Başarılı', 'Kayıt başarıyla oluşturuldu!');
         setTimeout(() => {
-          router.replace('/login/isci');
+          if (role === 2) {
+            router.replace('/login/sendika');
+          } else {
+            router.replace('/login/isci');
+          }
         }, 700);
       } else {
         Alert.alert('Hata', data.message || 'Kayıt sırasında bir hata oluştu.');
@@ -100,7 +93,7 @@ export default function Register() {
             <Text style={styles.iconText}>📝</Text>
           </View>
           <Text style={styles.title}>
-            {role === 'isci' ? 'İşçi Üyeliği' : role === 'sendikaci' ? 'Sendikacı Üyeliği' : 'Üye Ol'}
+            {role === 2 ? 'Sendikacı Üyeliği' : 'İşçi Üyeliği'}
           </Text>
           <Text style={styles.subtitle}>Yeni hesap oluşturun</Text>
 
