@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, Alert } from 'react-native';
-import { Link, router } from 'expo-router';
+import { Link, router, useLocalSearchParams } from 'expo-router';
 import AnimatedBackground from '../../components/AnimatedBackground';
 import LogoWithSlogan from '../../components/LogoWithSlogan';
 import { Ionicons } from '@expo/vector-icons';
@@ -26,7 +26,7 @@ export default function IsciLogin() {
       const data = await api.login(tcNo, password);
       if (data.success) {
         Alert.alert('Başarılı', 'Giriş yapıldı!');
-        router.replace(`/home?ad=${encodeURIComponent(data.user.ad)}&soyad=${encodeURIComponent(data.user.soyad)}&role=1`);
+        router.replace({ pathname: '/home', params: { ad: data.user.ad, soyad: data.user.soyad, role: 1, user_id: data.user.id } });
       } else {
         Alert.alert('Hata', data.message || 'TC Kimlik No veya şifre hatalı.');
       }

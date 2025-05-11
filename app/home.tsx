@@ -16,6 +16,7 @@ export default function Home() {
   const ad = params.ad || '';
   const soyad = params.soyad || '';
   const role = Number(params.role) || 1;
+  const userId = params.user_id;
 
   const handleLogout = () => {
     Alert.alert('Çıkış Yap', 'Oturumdan çıkmak istediğinize emin misiniz?', [
@@ -73,13 +74,17 @@ export default function Home() {
             <View style={styles.menuIconBg}><Ionicons name="calendar" size={32} color="#fff" /></View>
             <Text style={styles.menuLabel}>Etkinlikler</Text>
           </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/etkinlikler')}>
+            <View style={styles.menuIconBg}><Ionicons name="calendar" size={32} color="#fff" /></View>
+            <Text style={styles.menuLabel}>Etkinlikler</Text>
+          </TouchableOpacity>
           {role === 2 ? (
-            <TouchableOpacity style={styles.menuItem} onPress={() => router.push({ pathname: '/bordro-yonetimi' })}>
+            <TouchableOpacity style={styles.menuItem} onPress={() => router.push({ pathname: '/bordro-yonetimi', params: { user_id: userId } })}>
               <View style={styles.menuIconBg}><Ionicons name="document-text" size={32} color="#fff" /></View>
               <Text style={styles.menuLabel}>Bordro Yönetimi</Text>
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity style={styles.menuItem} onPress={() => router.push({ pathname: '/bordrolarim' })}>
+            <TouchableOpacity style={styles.menuItem} onPress={() => router.push({ pathname: '/bordrolarim', params: { user_id: userId } })}>
               <View style={styles.menuIconBg}><Ionicons name="document-text" size={32} color="#fff" /></View>
               <Text style={styles.menuLabel}>Bordrolarım</Text>
             </TouchableOpacity>

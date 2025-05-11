@@ -14,6 +14,7 @@ export default function RootLayout() {
             width: 280,
           },
           drawerType: 'front',
+          swipeEnabled: false,
         }}
         drawerContent={(props) => <CustomDrawerContent {...props} />}
       >

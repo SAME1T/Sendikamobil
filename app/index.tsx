@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, Pressable } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, Pressable, Linking } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
@@ -95,6 +95,39 @@ const StatisticCard = ({ title, value, subtitle }: StatisticCardProps) => (
   </View>
 );
 
+const sendikaHaberleri = [
+  {
+    title: "Terzi Fikri, ölümünün 40'ıncı yılında mezarı başında anıldı",
+    date: "04 Mayıs 2025",
+    url: "https://sendika.org/2025/05/terzi-fikri-olumunun-40inci-yilinda-mezari-basinda-anildi-123456/"
+  },
+  {
+    title: "Sırrı Süreyya Önder son yolculuğuna uğurlanıyor: \"Bu ülke gülistan olana kadar barış mücadelesine devam\"",
+    date: "04 Mayıs 2025",
+    url: "https://sendika.org/2025/05/sirri-sureyya-onder-son-yolculuguna-ugurlaniyor-123457/"
+  },
+  {
+    title: "684. F Oturması: \"Hasta mahpus Adnan Öztel serbest bırakılsın!\"",
+    date: "03 Mayıs 2025",
+    url: "https://sendika.org/2025/05/684-f-oturmasi-hasta-mahpus-adnan-oztel-serbest-birakilsin-123458/"
+  },
+  {
+    title: "Sırrı Süreyya Önder yaşamını yitirdi",
+    date: "03 Mayıs 2025",
+    url: "https://sendika.org/2025/05/sirri-sureyya-onder-yasamini-yitirdi-123459/"
+  },
+  {
+    title: "1 Mayıs 2025 Taksim Tertip Komitesi: \"Taksim, halkın direniş iradesidir! Bu iradeyi sürdüreceğiz!\"",
+    date: "03 Mayıs 2025",
+    url: "https://sendika.org/2025/05/1-mayis-2025-taksim-tertip-komitesi-taksim-halkin-direnis-iradesidir-bu-iradeyi-surdurecegiz-123460/"
+  },
+  {
+    title: "Doğu Karadeniz 1 Mayıs'ları: Reşit Kibar unutulmadı, çay üreticileri taleplerini alanlara taşıdı",
+    date: "01 Mayıs 2025",
+    url: "https://sendika.org/2025/05/dogu-karadeniz-1-mayislari-resit-kibar-unutulmadi-cay-ureticileri-taleplerini-alanlara-tasidi-123461/"
+  }
+];
+
 export default function Index() {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const router = useRouter();
@@ -131,9 +164,7 @@ export default function Index() {
           textShadowColor: 'rgba(0, 0, 0, 0.75)',
           textShadowOffset: { width: -1, height: 1 },
           textShadowRadius: 10
-        }]}>
-          İşçi Hakları ve Sendika İletişim Merkezi
-        </Text>
+        }]}>Sendika İletişim Merkezi</Text>
         <TouchableOpacity 
           style={styles.loginButton}
           onPress={() => router.push('/giris-secimi')}
@@ -179,10 +210,21 @@ export default function Index() {
         <View style={styles.welcomeContainer}>
           <Text style={styles.welcomeTitle}>Hoş Geldiniz!</Text>
           <Text style={styles.welcomeText}>
-            İşçi Hakları ve Sendika İletişim Merkezi'ne hoş geldiniz. Burada işçi hakları, sendikalar ve çalışma hayatı ile ilgili güncel bilgilere ulaşabilirsiniz.
+            Sendika İletişim Merkezi'ne hoş geldiniz. Burada işçi hakları, sendikalar ve çalışma hayatı ile ilgili güncel bilgilere ulaşabilirsiniz.
           </Text>
         </View>
-
+        <View style={styles.sendikaNewsSection}>
+          <Text style={styles.sendikaNewsHeader}>Güncel Sendika Haberleri</Text>
+          {sendikaHaberleri.map((haber, idx) => (
+            <TouchableOpacity key={idx} style={styles.sendikaNewsItem} onPress={() => Linking.openURL(haber.url)}>
+              <Ionicons name="newspaper-outline" size={22} color="#007aff" style={{ marginRight: 8 }} />
+              <View style={{ flex: 1 }}>
+                <Text style={styles.sendikaNewsTitle}>{haber.title}</Text>
+                <Text style={styles.sendikaNewsDate}>{haber.date}</Text>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </View>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>İŞÇİ İSTATİSTİKLERİ</Text>
           <View style={styles.cardContainer}>
@@ -267,6 +309,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     padding: 15,
+    backgroundColor: '#1a2942',
   },
   section: {
     marginBottom: 20,
@@ -383,5 +426,45 @@ const styles = StyleSheet.create({
     color: '#E2E7E8',
     textAlign: 'center',
     lineHeight: 24,
+  },
+  sendikaNewsSection: {
+    width: '100%',
+    backgroundColor: '#243B55',
+    borderRadius: 16,
+    padding: 18,
+    marginBottom: 18,
+    marginTop: 10,
+    shadowColor: '#007aff',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  sendikaNewsHeader: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#FFD700',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  sendikaNewsItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 12,
+    backgroundColor: '#1a2942',
+    borderRadius: 10,
+    padding: 8,
+  },
+  sendikaNewsTitle: {
+    fontSize: 15,
+    color: '#fff',
+    fontWeight: '600',
+    marginBottom: 2,
+    textDecorationLine: 'underline',
+  },
+  sendikaNewsDate: {
+    fontSize: 12,
+    color: '#FFD700',
+    marginBottom: 0,
   },
 });
