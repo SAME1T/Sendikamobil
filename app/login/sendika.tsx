@@ -32,7 +32,7 @@ export default function SendikaLogin() {
       const data = await api.login(tcNo, password);
       if (data.success) {
         Alert.alert('Başarılı', 'Giriş yapıldı!');
-        router.replace({ pathname: '/home', params: { ad: data.user.ad, soyad: data.user.soyad, role: 2, user_id: data.user.id } });
+        router.replace({ pathname: '/sendikaci-home', params: { ad: data.user.ad, soyad: data.user.soyad, role: 2, user_id: data.user.id } });
       } else {
         Alert.alert('Hata', data.message || 'TC Kimlik No veya şifre hatalı.');
       }

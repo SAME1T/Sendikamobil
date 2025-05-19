@@ -11,12 +11,17 @@ const announcements = [
   { id: 3, title: 'Yeni İş Güvenliği Eğitimi', date: '2024-06-20' },
 ];
 
-export default function Home() {
+export default function IsciHome() {
   const params = useLocalSearchParams();
   const ad = params.ad || '';
   const soyad = params.soyad || '';
-  const role = Number(params.role) || 1;
   const userId = params.user_id;
+  const role = Number(params.role) || 1;
+  if (!userId) {
+    Alert.alert('Hata', 'Kullanıcı bilgisi bulunamadı. Lütfen tekrar giriş yapın.');
+    router.replace('/');
+    return null;
+  }
 
   const handleLogout = () => {
     Alert.alert('Çıkış Yap', 'Oturumdan çıkmak istediğinize emin misiniz?', [
@@ -31,9 +36,7 @@ export default function Home() {
       <ScrollView style={styles.container} contentContainerStyle={styles.content}>
         <View style={styles.headerBox}>
           <Text style={styles.header}>Hoş Geldiniz!</Text>
-          {(ad || soyad) && (
-            <Text style={styles.name}>{ad} {soyad}</Text>
-          )}
+          <Text style={styles.name}>{ad} {soyad}</Text>
           <Text style={styles.subHeader}>Sendika İletişim Merkezi üye paneline hoş geldiniz.</Text>
         </View>
         <View style={styles.announcementSection}>
@@ -46,9 +49,9 @@ export default function Home() {
           ))}
         </View>
         <View style={styles.menuGrid}>
-          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/anketler')}>
-            <View style={styles.menuIconBg}><Ionicons name="list-circle" size={32} color="#fff" /></View>
-            <Text style={styles.menuLabel}>Anketler</Text>
+          <TouchableOpacity style={styles.menuItem} onPress={() => router.push({ pathname: '/anketlerim', params: { user_id: userId, ad, soyad, role } })}>
+            <View style={styles.menuIconBg}><Ionicons name="list" size={32} color="#fff" /></View>
+            <Text style={styles.menuLabel}>Anketlerim</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/grev-kartlari')}>
             <View style={styles.menuIconBg}><Ionicons name="card" size={32} color="#fff" /></View>
@@ -74,21 +77,10 @@ export default function Home() {
             <View style={styles.menuIconBg}><Ionicons name="calendar" size={32} color="#fff" /></View>
             <Text style={styles.menuLabel}>Etkinlikler</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/etkinlikler')}>
-            <View style={styles.menuIconBg}><Ionicons name="calendar" size={32} color="#fff" /></View>
-            <Text style={styles.menuLabel}>Etkinlikler</Text>
+          <TouchableOpacity style={styles.menuItem} onPress={() => router.push({ pathname: '/bordrolarim', params: { user_id: userId, ad, soyad, role } })}>
+            <View style={styles.menuIconBg}><Ionicons name="document-text" size={32} color="#fff" /></View>
+            <Text style={styles.menuLabel}>Bordrolarım</Text>
           </TouchableOpacity>
-          {role === 2 ? (
-            <TouchableOpacity style={styles.menuItem} onPress={() => router.push({ pathname: '/bordro-yonetimi', params: { user_id: userId } })}>
-              <View style={styles.menuIconBg}><Ionicons name="document-text" size={32} color="#fff" /></View>
-              <Text style={styles.menuLabel}>Bordro Yönetimi</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity style={styles.menuItem} onPress={() => router.push({ pathname: '/bordrolarim', params: { user_id: userId } })}>
-              <View style={styles.menuIconBg}><Ionicons name="document-text" size={32} color="#fff" /></View>
-              <Text style={styles.menuLabel}>Bordrolarım</Text>
-            </TouchableOpacity>
-          )}
         </View>
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
           <Ionicons name="log-out-outline" size={24} color="#fff" style={{ marginRight: 8 }} />
@@ -137,6 +129,7 @@ const styles = StyleSheet.create({
     color: '#007aff',
     marginBottom: 8,
     textAlign: 'center',
+    textTransform: 'capitalize',
   },
   subHeader: {
     fontSize: 16,
@@ -244,6 +237,5 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 17,
     fontWeight: 'bold',
-    letterSpacing: 0.5,
   },
 }); 

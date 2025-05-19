@@ -26,7 +26,8 @@ export default function IsciLogin() {
       const data = await api.login(tcNo, password);
       if (data.success) {
         Alert.alert('Başarılı', 'Giriş yapıldı!');
-        router.replace({ pathname: '/home', params: { ad: data.user.ad, soyad: data.user.soyad, role: 1, user_id: data.user.id } });
+        console.log('Giriş yapan işçi:', { id: data.user.id, ad: data.user.ad, soyad: data.user.soyad });
+        router.replace({ pathname: '/isci-home', params: { ad: data.user.ad, soyad: data.user.soyad, role: 1, user_id: data.user.id } });
       } else {
         Alert.alert('Hata', data.message || 'TC Kimlik No veya şifre hatalı.');
       }

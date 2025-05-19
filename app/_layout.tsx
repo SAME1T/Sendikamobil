@@ -46,6 +46,20 @@ export default function RootLayout() {
             title: 'Üye Ol'
           }}
         />
+        <Drawer.Screen 
+          name="anketlerim" 
+          options={{
+            drawerLabel: 'Anketlerim',
+            title: 'Anketlerim'
+          }}
+        />
+        <Drawer.Screen 
+          name="anket-yonetimi" 
+          options={{
+            drawerLabel: 'Anket Yönetimi',
+            title: 'Anket Yönetimi'
+          }}
+        />
       </Drawer>
     </GestureHandlerRootView>
   );

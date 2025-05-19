@@ -4,15 +4,17 @@ const pool = require('./db');
 require('dotenv').config();
 const multer = require('multer');
 const path = require('path');
+const surveyRoutes = require('./routes/survey');
 
 const app = express();
 const port = process.env.PORT || 3001;
 
 // CORS ayarlarını güncelle
 app.use(cors({
-  origin: '*', // Expo için tüm originlere izin ver
+  origin: '*', // Tüm originlere izin ver
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
 
 app.use(express.json());
@@ -34,6 +36,16 @@ app.get('/users', async (req, res) => {
 // Login endpoint
 app.post('/api/login', async (req, res) => {
   const { tc_no, password } = req.body;
+  
+  console.log('Login attempt:', { tc_no });
+
+  if (!tc_no || !password) {
+    console.log('Login failed: Missing credentials');
+    return res.status(400).json({
+      success: false,
+      message: 'TC Kimlik No ve şifre gereklidir'
+    });
+  }
 
   try {
     // Veritabanında kullanıcıyı ara
@@ -45,6 +57,7 @@ app.post('/api/login', async (req, res) => {
     if (result.rows.length > 0) {
       // Kullanıcı bulundu
       const user = result.rows[0];
+      console.log('Login successful:', { userId: user.id, role: user.rol });
       res.json({
         success: true,
         user: {
@@ -59,6 +72,7 @@ app.post('/api/login', async (req, res) => {
       });
     } else {
       // Kullanıcı bulunamadı
+      console.log('Login failed: Invalid credentials');
       res.status(401).json({
         success: false,
         message: 'TC Kimlik No veya şifre hatalı'
@@ -68,7 +82,7 @@ app.post('/api/login', async (req, res) => {
     console.error('Login error:', error);
     res.status(500).json({
       success: false,
-      message: 'Sunucu hatası oluştu'
+      message: 'Sunucu hatası oluştu: ' + error.message
     });
   }
 });
@@ -166,6 +180,8 @@ app.post('/api/upload/payroll', upload.single('pdf'), (req, res) => {
 });
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+app.use('/api/surveys', surveyRoutes);
 
 app.listen(port, '0.0.0.0', () => {
   console.log(`Server running at http://localhost:${port}`);

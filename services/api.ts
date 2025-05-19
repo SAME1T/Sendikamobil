@@ -1,6 +1,6 @@
 import { Platform } from 'react-native';
 
-// API base URL'i (bilgisayarın yerel IP adresiyle güncellendi)
+// API base URL'i (bilgisayarın IP adresi)
 export const API_BASE_URL = 'http://172.20.10.2:3001';
 
 // API servisi
@@ -8,6 +8,7 @@ const api = {
   // Kullanıcı girişi
   login: async (tcNo: string, password: string) => {
     try {
+      console.log('Login attempt:', { tcNo });
       const response = await fetch(`${API_BASE_URL}/api/login`, {
         method: 'POST',
         headers: {
@@ -15,7 +16,16 @@ const api = {
         },
         body: JSON.stringify({ tc_no: tcNo, password }),
       });
-      return await response.json();
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Login failed:', errorData);
+        throw new Error(errorData.message || 'Giriş başarısız');
+      }
+      
+      const data = await response.json();
+      console.log('Login successful:', data);
+      return data;
     } catch (error) {
       console.error('Login error:', error);
       throw error;

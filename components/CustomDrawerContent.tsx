@@ -8,9 +8,9 @@ import Svg, { Path, Circle, Rect } from 'react-native-svg';
 const menuItems = [
   { 
     id: 1, 
-    title: 'Anketler', 
+    title: 'Anketlerim', 
     icon: 'stats-chart',
-    route: '/surveys'
+    route: '/anketlerim'
   },
   { 
     id: 2, 
