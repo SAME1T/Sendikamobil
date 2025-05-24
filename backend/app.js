@@ -4,11 +4,22 @@ const pool = require('./db');
 require('dotenv').config();
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 const surveyRoutes = require('./routes/survey');
 const etkinliklerRoutes = require('./routes/etkinlikler');
+const postsRoutes = require('./routes/posts');
 
 const app = express();
 const port = process.env.PORT || 3001;
+
+// Upload klasörlerini oluştur
+const uploadsDir = path.join(__dirname, 'uploads');
+const payrollsDir = path.join(uploadsDir, 'payrolls');
+const postsDir = path.join(uploadsDir, 'posts');
+
+if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+if (!fs.existsSync(payrollsDir)) fs.mkdirSync(payrollsDir, { recursive: true });
+if (!fs.existsSync(postsDir)) fs.mkdirSync(postsDir, { recursive: true });
 
 // CORS ayarlarını güncelle
 app.use(cors({
@@ -180,10 +191,41 @@ app.post('/api/upload/payroll', upload.single('pdf'), (req, res) => {
   res.json({ success: true, pdf_path: pdfPath });
 });
 
+// Post medyası upload endpointi
+const postStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, 'uploads', 'posts'));
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + '-' + file.originalname);
+  }
+});
+
+const postUpload = multer({
+  storage: postStorage,
+  fileFilter: function (req, file, cb) {
+    if (file.mimetype.startsWith('image/') || file.mimetype.startsWith('video/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Sadece resim ve video dosyası yükleyebilirsiniz!'));
+    }
+  }
+});
+
+app.post('/api/upload/post-media', postUpload.single('media'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ success: false, message: 'Dosya yüklenemedi.' });
+  }
+  const mediaPath = '/uploads/posts/' + req.file.filename;
+  res.json({ success: true, media_path: mediaPath });
+});
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api/surveys', surveyRoutes);
 app.use('/api/etkinlikler', etkinliklerRoutes);
+app.use('/api/posts', postsRoutes);
 
 app.listen(port, '0.0.0.0', () => {
   console.log(`Server running at http://localhost:${port}`);

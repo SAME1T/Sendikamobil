@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import AnimatedBackground from '../components/AnimatedBackground';
 import ChatBot from '../components/ChatBot';
+import SocialFeed from '../components/SocialFeed';
 
 const announcements = [
   { id: 1, title: 'Aidat Ödemeleri Başladı', date: '2024-06-01' },
@@ -39,15 +40,16 @@ export default function IsciHome() {
           <Text style={styles.name}>{ad} {soyad}</Text>
           <Text style={styles.subHeader}>Sendika İletişim Merkezi üye paneline hoş geldiniz.</Text>
         </View>
-        <View style={styles.announcementSection}>
-          <Text style={styles.announcementHeader}>Haber ve Duyurular</Text>
-          {announcements.map((item) => (
-            <View key={item.id} style={styles.announcementCard}>
-              <Text style={styles.announcementTitle}>{item.title}</Text>
-              <Text style={styles.announcementDate}>{item.date}</Text>
-            </View>
-          ))}
+        
+        {/* Sosyal Medya Feed'i */}
+        <View style={styles.feedContainer}>
+          <SocialFeed 
+            userId={userId as string}
+            userRole={role}
+            userName={`${ad} ${soyad}`}
+          />
         </View>
+        
         <View style={styles.menuGrid}>
           <TouchableOpacity style={styles.menuItem} onPress={() => router.push({ pathname: '/anketlerim', params: { user_id: userId, ad, soyad, role } })}>
             <View style={styles.menuIconBg}><Ionicons name="list" size={32} color="#fff" /></View>
@@ -57,25 +59,17 @@ export default function IsciHome() {
             <View style={styles.menuIconBg}><Ionicons name="card" size={32} color="#fff" /></View>
             <Text style={styles.menuLabel}>Grev Kartları</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/toplantilar')}>
-            <View style={styles.menuIconBg}><Ionicons name="people" size={32} color="#fff" /></View>
-            <Text style={styles.menuLabel}>Toplantılar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/eylem-planlari')}>
-            <View style={styles.menuIconBg}><Ionicons name="alert-circle" size={32} color="#fff" /></View>
-            <Text style={styles.menuLabel}>Eylem Planları</Text>
-          </TouchableOpacity>
           <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/duyurular')}>
             <View style={styles.menuIconBg}><Ionicons name="megaphone" size={32} color="#fff" /></View>
             <Text style={styles.menuLabel}>Duyurular</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/iletisim')}>
-            <View style={styles.menuIconBg}><Ionicons name="call" size={32} color="#fff" /></View>
-            <Text style={styles.menuLabel}>İletişim</Text>
-          </TouchableOpacity>
           <TouchableOpacity style={styles.menuItem} onPress={() => router.push({ pathname: '/etkinlikler', params: { user_id: userId, ad, soyad, role } })}>
             <View style={styles.menuIconBg}><Ionicons name="calendar" size={32} color="#fff" /></View>
             <Text style={styles.menuLabel}>Etkinlikler</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/iletisim')}>
+            <View style={styles.menuIconBg}><Ionicons name="call" size={32} color="#fff" /></View>
+            <Text style={styles.menuLabel}>İletişim</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.menuItem} onPress={() => router.push({ pathname: '/bordrolarim', params: { user_id: userId, ad, soyad, role } })}>
             <View style={styles.menuIconBg}><Ionicons name="document-text" size={32} color="#fff" /></View>
@@ -137,40 +131,18 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     textAlign: 'center',
   },
-  announcementSection: {
+  feedContainer: {
     width: '100%',
-    backgroundColor: '#f8fbff',
+    height: 400,
+    backgroundColor: '#fff',
     borderRadius: 16,
-    padding: 20,
+    marginBottom: 28,
+    overflow: 'hidden',
     shadowColor: '#007aff',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
     shadowRadius: 6,
     elevation: 2,
-    marginBottom: 28,
-  },
-  announcementHeader: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#007aff',
-    marginBottom: 14,
-    textAlign: 'center',
-  },
-  announcementCard: {
-    marginBottom: 12,
-    paddingBottom: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e3e9f0',
-  },
-  announcementTitle: {
-    fontSize: 15,
-    color: '#222',
-    fontWeight: '600',
-  },
-  announcementDate: {
-    fontSize: 12,
-    color: '#888',
-    marginTop: 2,
   },
   menuGrid: {
     flexDirection: 'row',

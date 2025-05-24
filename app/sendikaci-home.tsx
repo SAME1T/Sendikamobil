@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import AnimatedBackground from '../components/AnimatedBackground';
 import ChatBot from '../components/ChatBot';
+import SocialFeed from '../components/SocialFeed';
 
 const announcements = [
   { id: 1, title: 'Aidat Ödemeleri Başladı', date: '2024-06-01' },
@@ -39,15 +40,16 @@ export default function SendikaciHome() {
           <Text style={styles.name}>{ad} {soyad}</Text>
           <Text style={styles.subHeader}>Sendika İletişim Merkezi yönetici paneline hoş geldiniz.</Text>
         </View>
-        <View style={styles.announcementSection}>
-          <Text style={styles.announcementHeader}>Haber ve Duyurular</Text>
-          {announcements.map((item) => (
-            <View key={item.id} style={styles.announcementCard}>
-              <Text style={styles.announcementTitle}>{item.title}</Text>
-              <Text style={styles.announcementDate}>{item.date}</Text>
-            </View>
-          ))}
+        
+        {/* Sosyal Medya Feed'i */}
+        <View style={styles.feedContainer}>
+          <SocialFeed 
+            userId={userId as string}
+            userRole={role}
+            userName={`${ad} ${soyad}`}
+          />
         </View>
+        
         <View style={styles.menuGrid}>
           <TouchableOpacity style={styles.menuItem} onPress={() => router.push({ pathname: '/anket-yonetimi', params: { user_id: userId, ad, soyad, role } })}>
             <View style={styles.menuIconBg}><Ionicons name="list-circle" size={32} color="#fff" /></View>
@@ -60,10 +62,6 @@ export default function SendikaciHome() {
           <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/toplantilar')}>
             <View style={styles.menuIconBg}><Ionicons name="people" size={32} color="#fff" /></View>
             <Text style={styles.menuLabel}>Toplantılar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/eylem-planlari')}>
-            <View style={styles.menuIconBg}><Ionicons name="alert-circle" size={32} color="#fff" /></View>
-            <Text style={styles.menuLabel}>Eylem Planları</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/duyurular')}>
             <View style={styles.menuIconBg}><Ionicons name="megaphone" size={32} color="#fff" /></View>
@@ -95,25 +93,19 @@ export default function SendikaciHome() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'linear-gradient(180deg, #e3f0ff 0%, #f4f6fa 100%)',
   },
   content: {
-    padding: 20,
-    alignItems: 'center',
-    paddingBottom: 60,
-    paddingTop: 40,
+    padding: 16,
   },
   headerBox: {
-    width: '100%',
-    backgroundColor: '#fff',
-    borderRadius: 18,
-    padding: 28,
-    marginBottom: 28,
-    alignItems: 'center',
-    shadowColor: '#007aff',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderRadius: 12,
+    padding: 20,
+    marginBottom: 16,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
     elevation: 3,
   },
   header: {
@@ -137,40 +129,18 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     textAlign: 'center',
   },
-  announcementSection: {
-    width: '100%',
-    backgroundColor: '#f8fbff',
-    borderRadius: 16,
-    padding: 20,
-    shadowColor: '#007aff',
+  feedContainer: {
+    flex: 1,
+    minHeight: 500,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    marginBottom: 16,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 6,
-    elevation: 2,
-    marginBottom: 28,
-  },
-  announcementHeader: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#007aff',
-    marginBottom: 14,
-    textAlign: 'center',
-  },
-  announcementCard: {
-    marginBottom: 12,
-    paddingBottom: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e3e9f0',
-  },
-  announcementTitle: {
-    fontSize: 15,
-    color: '#222',
-    fontWeight: '600',
-  },
-  announcementDate: {
-    fontSize: 12,
-    color: '#888',
-    marginTop: 2,
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    overflow: 'hidden',
   },
   menuGrid: {
     flexDirection: 'row',
