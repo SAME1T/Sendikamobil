@@ -57,15 +57,11 @@ export default function SendikaciHome() {
           </TouchableOpacity>
           <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/grev-kartlari')}>
             <View style={styles.menuIconBg}><Ionicons name="card" size={32} color="#fff" /></View>
-            <Text style={styles.menuLabel}>Grev Kartları</Text>
+            <Text style={styles.menuLabel}>Grev Yönetimi</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/toplantilar')}>
             <View style={styles.menuIconBg}><Ionicons name="people" size={32} color="#fff" /></View>
             <Text style={styles.menuLabel}>Toplantılar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/duyurular')}>
-            <View style={styles.menuIconBg}><Ionicons name="megaphone" size={32} color="#fff" /></View>
-            <Text style={styles.menuLabel}>Duyurular</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/iletisim')}>
             <View style={styles.menuIconBg}><Ionicons name="call" size={32} color="#fff" /></View>
@@ -80,10 +76,30 @@ export default function SendikaciHome() {
             <Text style={styles.menuLabel}>Bordro Yönetimi</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Ionicons name="log-out-outline" size={24} color="#fff" style={{ marginRight: 8 }} />
-          <Text style={styles.logoutButtonText}>Çıkış Yap</Text>
-        </TouchableOpacity>
+        <View style={styles.footer}>
+          <TouchableOpacity 
+            style={styles.footerButton}
+            onPress={() => router.push({
+              pathname: '/ayarlar',
+              params: {
+                user_id: userId,
+                role: 2,
+                ad: ad,
+                soyad: soyad
+              }
+            })}
+          >
+            <Ionicons name="settings-outline" size={24} color="#FFD700" />
+            <Text style={styles.footerButtonText}>Ayarlar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.footerButton}
+            onPress={handleLogout}
+          >
+            <Ionicons name="log-out-outline" size={24} color="#FFD700" />
+            <Text style={styles.footerButtonText}>Çıkış Yap</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
       <ChatBot />
     </View>
@@ -186,7 +202,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  logoutButton: {
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 16,
+  },
+  footerButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -194,16 +216,13 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     paddingVertical: 14,
     paddingHorizontal: 32,
-    marginTop: 10,
-    marginBottom: 18,
-    alignSelf: 'center',
     shadowColor: '#ff3b30',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.12,
     shadowRadius: 8,
     elevation: 2,
   },
-  logoutButtonText: {
+  footerButtonText: {
     color: '#fff',
     fontSize: 17,
     fontWeight: 'bold',

@@ -8,45 +8,45 @@ import Svg, { Path, Circle, Rect } from 'react-native-svg';
 const menuItems = [
   { 
     id: 1, 
-    title: 'Anketlerim', 
-    icon: 'stats-chart',
-    route: '/anketlerim'
+    title: 'Anket Yönetimi', 
+    icon: 'list-circle',
+    route: '/giris-secimi'
   },
   { 
     id: 2, 
-    title: 'Grev Kararları', 
-    icon: 'hand-left',
-    route: '/strikes'
+    title: 'Grev Yönetimi', 
+    icon: 'card',
+    route: '/giris-secimi'
   },
   { 
     id: 3, 
     title: 'Toplantılar', 
     icon: 'people',
-    route: '/meetings'
+    route: '/giris-secimi'
   },
   { 
     id: 4, 
-    title: 'Eylem Planları', 
-    icon: 'megaphone',
-    route: '/actions'
+    title: 'Etkinlik Yönetimi', 
+    icon: 'calendar',
+    route: '/giris-secimi'
   },
   { 
     id: 5, 
-    title: 'Duyurular', 
-    icon: 'notifications',
-    route: '/announcements'
+    title: 'Bordro Yönetimi', 
+    icon: 'document-text',
+    route: '/giris-secimi'
   },
   { 
     id: 6, 
     title: 'İletişim', 
-    icon: 'mail',
-    route: '/contact'
+    icon: 'call',
+    route: '/giris-secimi'
   },
   { 
     id: 7, 
-    title: 'Etkinlikler', 
-    icon: 'calendar',
-    route: '/events'
+    title: 'Duyurular', 
+    icon: 'notifications',
+    route: '/giris-secimi'
   },
 ];
 
@@ -133,16 +133,6 @@ export default function CustomDrawerContent(props: any) {
           </TouchableOpacity>
         ))}
       </ScrollView>
-
-      <View style={styles.footer}>
-        <TouchableOpacity 
-          style={styles.footerButton}
-          onPress={() => router.push('/giris-secimi')}
-        >
-          <Ionicons name="settings-outline" size={24} color="#FFD700" />
-          <Text style={styles.footerButtonText}>Ayarlar</Text>
-        </TouchableOpacity>
-      </View>
     </DrawerContentScrollView>
   );
 }
@@ -194,20 +184,5 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '500',
-  },
-  footer: {
-    padding: 20,
-    borderTopWidth: 1,
-    borderTopColor: '#2c3e50',
-  },
-  footerButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  footerButtonText: {
-    color: '#FFD700',
-    marginLeft: 15,
-    fontSize: 16,
-    fontWeight: '500',
-  },
+  }
 }); 

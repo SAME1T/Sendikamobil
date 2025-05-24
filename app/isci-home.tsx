@@ -59,10 +59,6 @@ export default function IsciHome() {
             <View style={styles.menuIconBg}><Ionicons name="card" size={32} color="#fff" /></View>
             <Text style={styles.menuLabel}>Grev Kartları</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/duyurular')}>
-            <View style={styles.menuIconBg}><Ionicons name="megaphone" size={32} color="#fff" /></View>
-            <Text style={styles.menuLabel}>Duyurular</Text>
-          </TouchableOpacity>
           <TouchableOpacity style={styles.menuItem} onPress={() => router.push({ pathname: '/etkinlikler', params: { user_id: userId, ad, soyad, role } })}>
             <View style={styles.menuIconBg}><Ionicons name="calendar" size={32} color="#fff" /></View>
             <Text style={styles.menuLabel}>Etkinlikler</Text>
@@ -76,10 +72,30 @@ export default function IsciHome() {
             <Text style={styles.menuLabel}>Bordrolarım</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Ionicons name="log-out-outline" size={24} color="#fff" style={{ marginRight: 8 }} />
-          <Text style={styles.logoutButtonText}>Çıkış Yap</Text>
-        </TouchableOpacity>
+        <View style={styles.footer}>
+          <TouchableOpacity 
+            style={styles.footerButton}
+            onPress={() => router.push({
+              pathname: '/ayarlar',
+              params: {
+                user_id: userId,
+                role: 1,
+                ad: ad,
+                soyad: soyad
+              }
+            })}
+          >
+            <Ionicons name="settings-outline" size={24} color="#FFD700" />
+            <Text style={styles.footerButtonText}>Ayarlar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.footerButton}
+            onPress={handleLogout}
+          >
+            <Ionicons name="log-out-outline" size={24} color="#FFD700" />
+            <Text style={styles.footerButtonText}>Çıkış Yap</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
       <ChatBot />
     </View>
@@ -188,7 +204,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  logoutButton: {
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  footerButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -196,16 +217,14 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     paddingVertical: 14,
     paddingHorizontal: 32,
-    marginTop: 10,
-    marginBottom: 18,
-    alignSelf: 'center',
+    marginHorizontal: 5,
     shadowColor: '#ff3b30',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.12,
     shadowRadius: 8,
     elevation: 2,
   },
-  logoutButtonText: {
+  footerButtonText: {
     color: '#fff',
     fontSize: 17,
     fontWeight: 'bold',
