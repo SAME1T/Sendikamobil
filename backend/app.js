@@ -5,6 +5,7 @@ require('dotenv').config();
 const multer = require('multer');
 const path = require('path');
 const surveyRoutes = require('./routes/survey');
+const etkinliklerRoutes = require('./routes/etkinlikler');
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -182,6 +183,7 @@ app.post('/api/upload/payroll', upload.single('pdf'), (req, res) => {
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/api/surveys', surveyRoutes);
+app.use('/api/etkinlikler', etkinliklerRoutes);
 
 app.listen(port, '0.0.0.0', () => {
   console.log(`Server running at http://localhost:${port}`);

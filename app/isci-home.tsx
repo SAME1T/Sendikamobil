@@ -73,7 +73,7 @@ export default function IsciHome() {
             <View style={styles.menuIconBg}><Ionicons name="call" size={32} color="#fff" /></View>
             <Text style={styles.menuLabel}>İletişim</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/etkinlikler')}>
+          <TouchableOpacity style={styles.menuItem} onPress={() => router.push({ pathname: '/etkinlikler', params: { user_id: userId, ad, soyad, role } })}>
             <View style={styles.menuIconBg}><Ionicons name="calendar" size={32} color="#fff" /></View>
             <Text style={styles.menuLabel}>Etkinlikler</Text>
           </TouchableOpacity>
