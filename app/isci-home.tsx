@@ -164,16 +164,16 @@ const styles = StyleSheet.create({
   },
   feedContainer: {
     width: '100%',
-    height: 400,
+    height: 600, // Yükseklik artırıldı
     backgroundColor: '#fff',
-    borderRadius: 16,
-    marginBottom: 28,
+    borderRadius: 20, // Köşe yuvarlaklığı artırıldı
+    marginBottom: 32, // Alt margin artırıldı
     overflow: 'hidden',
     shadowColor: '#007aff',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 6,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 4 }, // Gölge derinliği artırıldı
+    shadowOpacity: 0.08, // Gölge opaklığı artırıldı
+    shadowRadius: 10, // Gölge yarıçapı artırıldı
+    elevation: 4, // Android elevation artırıldı
   },
   menuGrid: {
     flexDirection: 'row',

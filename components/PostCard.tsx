@@ -281,10 +281,13 @@ export default function PostCard({ post, currentUserId, onLike, onComment, onDel
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    marginVertical: 4,
-    padding: 16,
+    marginVertical: 6, // Dikey margin artırıldı
+    marginHorizontal: 4, // Yatay margin eklendi
+    padding: 20, // Padding artırıldı
     borderBottomWidth: 8,
     borderBottomColor: '#f5f5f5',
+    borderRadius: 12, // Köşe yuvarlaklığı eklendi
+    minHeight: 150, // Minimum yükseklik eklendi
   },
   header: {
     flexDirection: 'row',
@@ -348,18 +351,20 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   content: {
-    marginBottom: 12,
+    marginBottom: 16, // Alt margin artırıldı
+    minHeight: 60, // Minimum yükseklik eklendi
   },
   contentText: {
-    fontSize: 15,
-    lineHeight: 20,
+    fontSize: 16, // Font boyutu artırıldı
+    lineHeight: 24, // Satır yüksekliği artırıldı
     color: '#333',
+    paddingVertical: 4, // Dikey padding eklendi
   },
   mediaImage: {
     width: '100%',
-    height: 200,
-    borderRadius: 8,
-    marginTop: 8,
+    height: 250, // Yükseklik artırıldı
+    borderRadius: 12, // Köşe yuvarlaklığı artırıldı
+    marginTop: 12, // Üst margin artırıldı
   },
   stats: {
     paddingVertical: 8,
@@ -374,15 +379,18 @@ const styles = StyleSheet.create({
   actions: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingVertical: 8,
+    paddingVertical: 12, // Dikey padding artırıldı
     borderTopWidth: 1,
     borderTopColor: '#f0f0f0',
+    minHeight: 50, // Minimum yükseklik eklendi
   },
   actionButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 8,
-    borderRadius: 8,
+    padding: 12, // Padding artırıldı
+    borderRadius: 10, // Köşe yuvarlaklığı artırıldı
+    minWidth: 80, // Minimum genişlik eklendi
+    justifyContent: 'center', // Ortalama eklendi
   },
   likedButton: {
     backgroundColor: '#ffe6e6',
@@ -399,20 +407,22 @@ const styles = StyleSheet.create({
   commentInput: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 12,
-    paddingTop: 12,
+    marginTop: 16, // Üst margin artırıldı
+    paddingTop: 16, // Üst padding artırıldı
     borderTopWidth: 1,
     borderTopColor: '#f0f0f0',
+    minHeight: 60, // Minimum yükseklik eklendi
   },
   textInput: {
     flex: 1,
     borderWidth: 1,
     borderColor: '#e0e0e0',
-    borderRadius: 20,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    maxHeight: 80,
-    marginRight: 8,
+    borderRadius: 25, // Köşe yuvarlaklığı artırıldı
+    paddingHorizontal: 20, // Yatay padding artırıldı
+    paddingVertical: 12, // Dikey padding artırıldı
+    maxHeight: 100, // Maksimum yükseklik artırıldı
+    marginRight: 12, // Sağ margin artırıldı
+    fontSize: 16, // Font boyutu eklendi
   },
   sendButton: {
     padding: 8,

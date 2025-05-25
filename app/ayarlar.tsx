@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
-import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import { API_BASE_URL } from '../config';
 
@@ -10,24 +9,35 @@ export default function Ayarlar() {
   const params = useLocalSearchParams();
   const userId = params.user_id;
   const role = Number(params.role) || 1;
-  const [ad, setAd] = useState(params.ad || '');
-  const [soyad, setSoyad] = useState(params.soyad || '');
+  const [ad, setAd] = useState('');
+  const [soyad, setSoyad] = useState('');
   const [email, setEmail] = useState('');
   const [telefon, setTelefon] = useState('');
   const [yeniSifre, setYeniSifre] = useState('');
   const [yeniSifreTekrar, setYeniSifreTekrar] = useState('');
-  const [profilFoto, setProfilFoto] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [kayitTarihi, setKayitTarihi] = useState('');
 
-  const pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 0.5,
-    });
+  useEffect(() => {
+    fetchUserData();
+  }, [userId]);
 
-    if (!result.canceled) {
-      setProfilFoto(result.assets[0].uri);
+  const fetchUserData = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${API_BASE_URL}/api/users/${userId}`);
+      const userData = response.data;
+      
+      setAd(userData.ad || '');
+      setSoyad(userData.soyad || '');
+      setEmail(userData.email || '');
+      setTelefon(userData.telefon || '');
+      setKayitTarihi(userData.created_at || '');
+    } catch (error) {
+      console.error('Kullanıcı bilgileri çekme hatası:', error);
+      Alert.alert('Hata', 'Kullanıcı bilgileri yüklenirken bir hata oluştu.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -38,25 +48,18 @@ export default function Ayarlar() {
     }
 
     try {
-      const formData = new FormData();
-      formData.append('ad', String(ad));
-      formData.append('soyad', String(soyad));
-      formData.append('email', String(email));
-      formData.append('telefon', String(telefon));
+      const updateData: any = {
+        ad: String(ad),
+        soyad: String(soyad),
+        email: String(email),
+        telefon: String(telefon)
+      };
+
       if (yeniSifre) {
-        formData.append('sifre', String(yeniSifre));
-      }
-      if (profilFoto) {
-        const response = await fetch(profilFoto);
-        const blob = await response.blob();
-        formData.append('profil_foto', blob, 'profil.jpg');
+        updateData.sifre = String(yeniSifre);
       }
 
-      await axios.put(`${API_BASE_URL}/api/users/${userId}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      await axios.put(`${API_BASE_URL}/api/users/${userId}`, updateData);
 
       Alert.alert('Başarılı', 'Bilgileriniz güncellendi!');
       router.back();
@@ -64,6 +67,15 @@ export default function Ayarlar() {
       Alert.alert('Hata', 'Bilgiler güncellenirken bir hata oluştu.');
     }
   };
+
+  if (loading) {
+    return (
+      <View style={[styles.container, styles.loadingContainer]}>
+        <ActivityIndicator size="large" color="#007aff" />
+        <Text style={styles.loadingText}>Kullanıcı bilgileri yükleniyor...</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -102,9 +114,41 @@ export default function Ayarlar() {
               {role === 1 ? 'İşçi Üye' : 'Sendikacı'}
             </Text>
           </View>
+          <View style={styles.userStats}>
+            <View style={styles.statItem}>
+              <Text style={styles.statLabel}>Üye ID</Text>
+              <Text style={styles.statValue}>#{userId}</Text>
+            </View>
+            {kayitTarihi && (
+              <View style={styles.statItem}>
+                <Text style={styles.statLabel}>Kayıt Tarihi</Text>
+                <Text style={styles.statValue}>{new Date(kayitTarihi).toLocaleDateString('tr-TR')}</Text>
+              </View>
+            )}
+          </View>
         </View>
 
         <Text style={styles.sectionTitle}>Kişisel Bilgiler</Text>
+        <View style={styles.infoItem}>
+          <Ionicons name="person" size={24} color="#007aff" style={styles.infoIcon} />
+          <Text style={styles.infoLabel}>Ad:</Text>
+          <TextInput
+            style={styles.infoInput}
+            value={ad}
+            onChangeText={setAd}
+            placeholder="Adınız"
+          />
+        </View>
+        <View style={styles.infoItem}>
+          <Ionicons name="person" size={24} color="#007aff" style={styles.infoIcon} />
+          <Text style={styles.infoLabel}>Soyad:</Text>
+          <TextInput
+            style={styles.infoInput}
+            value={soyad}
+            onChangeText={setSoyad}
+            placeholder="Soyadınız"
+          />
+        </View>
         <View style={styles.infoItem}>
           <Ionicons name="mail" size={24} color="#007aff" style={styles.infoIcon} />
           <Text style={styles.infoLabel}>E-posta:</Text>
@@ -290,5 +334,35 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  loadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#007aff',
+  },
+  userStats: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 20,
+    paddingTop: 20,
+    borderTopWidth: 1,
+    borderTopColor: '#e0e0e0',
+  },
+  statItem: {
+    alignItems: 'center',
+  },
+  statLabel: {
+    fontSize: 12,
+    color: '#666',
+    marginBottom: 5,
+  },
+  statValue: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#007aff',
   },
 }); 

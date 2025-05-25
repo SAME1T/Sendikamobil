@@ -150,15 +150,15 @@ const styles = StyleSheet.create({
   },
   feedContainer: {
     flex: 1,
-    minHeight: 500,
+    minHeight: 700, // Minimum yükseklik artırıldı
     backgroundColor: '#fff',
-    borderRadius: 12,
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    borderRadius: 20, // Köşe yuvarlaklığı artırıldı
+    marginBottom: 24, // Alt margin artırıldı
+    shadowColor: '#007aff', // Gölge rengi değiştirildi
+    shadowOffset: { width: 0, height: 4 }, // Gölge derinliği artırıldı
+    shadowOpacity: 0.12, // Gölge opaklığı artırıldı
+    shadowRadius: 8, // Gölge yarıçapı artırıldı
+    elevation: 5, // Android elevation artırıldı
     overflow: 'hidden',
   },
   menuGrid: {

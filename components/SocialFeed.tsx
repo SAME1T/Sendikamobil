@@ -199,15 +199,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
+    minHeight: 600, // Minimum yükseklik artırıldı
+    width: '100%', // Tam genişlik
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 16,
+    padding: 20, // Padding artırıldı
     backgroundColor: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
+    minHeight: 70, // Header yüksekliği artırıldı
   },
   headerTitle: {
     fontSize: 20,
@@ -224,9 +227,11 @@ const styles = StyleSheet.create({
   },
   feed: {
     flex: 1,
+    minHeight: 500, // Feed alanı minimum yüksekliği artırıldı
   },
   feedContent: {
-    paddingBottom: 20,
+    paddingBottom: 30, // Alt padding artırıldı
+    paddingHorizontal: 8, // Yatay padding eklendi
   },
   loadingContainer: {
     flex: 1,

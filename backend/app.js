@@ -11,6 +11,7 @@ const postsRoutes = require('./routes/posts');
 const toplantilarRoutes = require('./routes/toplantilar');
 const grevlerRoutes = require('./routes/grevler');
 const aktiflikRoutes = require('./routes/aktiflik');
+const usersRoutes = require('./routes/users');
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -232,6 +233,7 @@ app.use('/api/posts', postsRoutes);
 app.use('/api/toplantilar', toplantilarRoutes);
 app.use('/api/grevler', grevlerRoutes);
 app.use('/api/aktiflik', aktiflikRoutes);
+app.use('/api/users', usersRoutes);
 
 app.listen(port, '0.0.0.0', () => {
   console.log(`Server running at http://localhost:${port}`);
