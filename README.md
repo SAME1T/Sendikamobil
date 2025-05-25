@@ -10,7 +10,18 @@ Sendika Mobil, işçiler ve sendikacılar için geliştirilmiş bir mobil uygula
 - Anket oluşturma ve yönetme
 - Duyuru sistemi
 - Etkinlik takvimi
+- **Toplantı yönetimi (yeni!)**
 - İletişim araçları
+
+## Toplantılar Modülü (YENİ)
+- **Toplantı Oluşturma:** Sendikacılar başlık, tarih, saat, yer, gündem, yapılacaklar ve katılımcı seçerek toplantı oluşturabilir.
+- **Katılımcı Seçimi:** Birden fazla sendikacı seçilebilir.
+- **Gündem & Yapılacaklar:** Her satır bir madde olacak şekilde eklenebilir.
+- **Katılımcı Notu:** İsteğe bağlı özel not eklenebilir.
+- **Sadece Oluşturan Silebilir:** Toplantıyı sadece oluşturan sendikacı silebilir.
+- **Tüm Toplantılar:** Yaklaşan ve geçmiş toplantılar tek listede, renkli ve modern kartlarla gösterilir.
+- **Güvenlik:** Form validasyonu ve yetki kontrolü.
+- **Web ile Tam Uyumlu:** Web arayüzündeki tüm işlevler mobilde de mevcut.
 
 ## Kullanılan Teknolojiler
 - **React Native**: Mobil uygulama geliştirme framework'ü
@@ -19,6 +30,8 @@ Sendika Mobil, işçiler ve sendikacılar için geliştirilmiş bir mobil uygula
 - **React Navigation**: Sayfa yönlendirme ve navigasyon
 - **React Native Gesture Handler**: Dokunma ve hareket işlemleri
 - **Expo Router**: Dosya tabanlı yönlendirme sistemi
+- **Node.js + Express**: Backend API
+- **PostgreSQL**: Veritabanı
 
 ## Kurulum
 1. Projeyi klonlayın:
@@ -36,30 +49,39 @@ npm install
 npm start
 ```
 
+4. Backend'i başlatın:
+```bash
+cd backend && npm install && npm start
+```
+
 ## Proje Yapısı
 ```
 sendika-mobil/
 ├── app/                    # Sayfa bileşenleri
 │   ├── login/             # Giriş sayfaları
 │   ├── register.tsx       # Üye olma sayfası
+│   ├── toplantilar.tsx    # Toplantılar modülü (yeni)
 │   └── ...
 ├── components/            # Yeniden kullanılabilir bileşenler
-├── assets/               # Görseller ve diğer kaynaklar
+├── backend/               # Node.js + Express API ve veritabanı
+├── assets/                # Görseller ve diğer kaynaklar
 └── ...
 ```
 
 ## Son Yapılan Güncellemeler
-1. **Klavye Yönetimi İyileştirmeleri**
+1. **Toplantılar Modülü Eklendi**
+   - Web arayüzündeki tüm toplantı işlevleri mobilde de mevcut
+   - Katılımcı seçimi, gündem, yapılacaklar, silme yetkisi
+   - Modern ve kullanıcı dostu arayüz
+2. **Klavye Yönetimi İyileştirmeleri**
    - Klavye açıldığında içeriğin otomatik kaydırılması
    - Form alanlarının klavye ile uyumlu çalışması
    - Gereksiz klavye butonlarının kaldırılması
-
-2. **Kod Kalitesi İyileştirmeleri**
+3. **Kod Kalitesi İyileştirmeleri**
    - TypeScript tip güvenliği
    - Bileşen yapısının sadeleştirilmesi
    - Performans optimizasyonları
-
-3. **Kullanıcı Deneyimi İyileştirmeleri**
+4. **Kullanıcı Deneyimi İyileştirmeleri**
    - Daha akıcı geçişler
    - Daha iyi hata yönetimi
    - Kullanıcı dostu arayüz

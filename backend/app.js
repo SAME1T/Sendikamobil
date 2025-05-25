@@ -8,6 +8,7 @@ const fs = require('fs');
 const surveyRoutes = require('./routes/survey');
 const etkinliklerRoutes = require('./routes/etkinlikler');
 const postsRoutes = require('./routes/posts');
+const toplantilarRoutes = require('./routes/toplantilar');
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -226,6 +227,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/surveys', surveyRoutes);
 app.use('/api/etkinlikler', etkinliklerRoutes);
 app.use('/api/posts', postsRoutes);
+app.use('/api/toplantilar', toplantilarRoutes);
 
 app.listen(port, '0.0.0.0', () => {
   console.log(`Server running at http://localhost:${port}`);
