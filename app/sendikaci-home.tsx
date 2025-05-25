@@ -55,8 +55,8 @@ export default function SendikaciHome() {
             <View style={styles.menuIconBg}><Ionicons name="list-circle" size={32} color="#fff" /></View>
             <Text style={styles.menuLabel}>Anket Yönetimi</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/grev-kartlari')}>
-            <View style={styles.menuIconBg}><Ionicons name="card" size={32} color="#fff" /></View>
+          <TouchableOpacity style={styles.menuItem} onPress={() => router.push({ pathname: '/grev-yonetimi', params: { user_id: userId, ad, soyad, role } })}>
+            <View style={styles.menuIconBg}><Ionicons name="megaphone" size={32} color="#fff" /></View>
             <Text style={styles.menuLabel}>Grev Yönetimi</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.menuItem} onPress={() => router.push({ pathname: '/toplantilar', params: { user_id: userId, ad, soyad, role } })}>
