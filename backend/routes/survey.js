@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
+const { aktiflikPuaniHesapla } = require('../utils/aktiflik');
 
 // Tüm anketleri getir
 router.get('/', async (req, res) => {
@@ -72,11 +73,19 @@ router.post('/:id/answer', async (req, res) => {
     return res.status(400).json({ error: 'Kullanıcı ve cevaplar gereklidir.' });
   }
   try {
+    // Bu kullanıcı daha önce bu anketi cevaplamış mı kontrol et
+    const existingAnswers = await pool.query(
+      'SELECT COUNT(*) FROM survey_answer WHERE survey_id = $1 AND user_id = $2',
+      [id, user_id]
+    );
+    const isFirstTime = parseInt(existingAnswers.rows[0].count) === 0;
+    
     // Önce bu kullanıcıya ait eski cevapları sil
     await pool.query(
       'DELETE FROM survey_answer WHERE survey_id = $1 AND user_id = $2',
       [id, user_id]
     );
+    
     // Sonra yeni cevapları ekle
     for (const a of answers) {
       await pool.query(
@@ -84,8 +93,69 @@ router.post('/:id/answer', async (req, res) => {
         [id, a.question_id, user_id, a.answer]
       );
     }
-    res.json({ success: true });
+    
+    // Eğer ilk kez cevaplıyorsa anket_katilimlari tablosuna ekle
+    if (isFirstTime) {
+      console.log(`Kullanıcı ${user_id} anket ${id}'e ilk kez katılıyor...`);
+      
+      try {
+        // Önce anket_katilimlari tablosuna ekle - mevcut tablo yapısına uygun
+        let katilimResult;
+        try {
+          // Önce mevcut tablo yapısını kontrol et
+          const tableInfo = await pool.query(`
+            SELECT column_name FROM information_schema.columns 
+            WHERE table_name = 'anket_katilimlari'
+          `);
+          console.log('anket_katilimlari tablo yapısı:', tableInfo.rows);
+          
+          // Eğer survey_id kolonu varsa onu kullan, yoksa anket_id kullan
+          const hasSurveyId = tableInfo.rows.some(row => row.column_name === 'survey_id');
+          const hasAnketId = tableInfo.rows.some(row => row.column_name === 'anket_id');
+          
+          if (hasSurveyId) {
+            katilimResult = await pool.query(
+              'INSERT INTO anket_katilimlari (user_id, survey_id, tarih) VALUES ($1, $2, CURRENT_TIMESTAMP) ON CONFLICT (user_id, survey_id) DO NOTHING RETURNING *',
+              [user_id, id]
+            );
+          } else if (hasAnketId) {
+            katilimResult = await pool.query(
+              'INSERT INTO anket_katilimlari (user_id, anket_id, tarih) VALUES ($1, $2, CURRENT_TIMESTAMP) ON CONFLICT (user_id, anket_id) DO NOTHING RETURNING *',
+              [user_id, id]
+            );
+          } else {
+            // Hiçbiri yoksa survey_id kolonu ekle
+            await pool.query('ALTER TABLE anket_katilimlari ADD COLUMN IF NOT EXISTS survey_id INTEGER');
+            katilimResult = await pool.query(
+              'INSERT INTO anket_katilimlari (user_id, survey_id, tarih) VALUES ($1, $2, CURRENT_TIMESTAMP) ON CONFLICT (user_id, survey_id) DO NOTHING RETURNING *',
+              [user_id, id]
+            );
+          }
+        } catch (alterError) {
+          console.error('Tablo düzenleme hatası:', alterError);
+          // Basit insert dene - mevcut tablo yapısına uygun
+          katilimResult = await pool.query(
+            'INSERT INTO anket_katilimlari (user_id, anket_id, tarih) VALUES ($1, $2, CURRENT_TIMESTAMP) RETURNING *',
+            [user_id, id]
+          );
+        }
+        console.log('Anket katılımı kaydedildi:', katilimResult.rows);
+        
+        // Aktiflik puanını yeniden hesapla ve güncelle
+        console.log(`Kullanıcı ${user_id} aktiflik puanı hesaplanıyor...`);
+        const yeniAktiflikPuani = await aktiflikPuaniHesapla(user_id);
+        console.log(`Kullanıcı ${user_id} yeni aktiflik puanı: ${yeniAktiflikPuani}`);
+        
+      } catch (aktiflikError) {
+        console.error('Aktiflik puanı güncelleme hatası:', aktiflikError);
+        console.error('Hata detayı:', aktiflikError.stack);
+        // Aktiflik hatası anket cevaplama işlemini durdurmasın
+      }
+    }
+    
+    res.json({ success: true, message: isFirstTime ? 'Anket cevaplandı ve aktiflik puanınız güncellendi!' : 'Anket cevapları güncellendi!' });
   } catch (err) {
+    console.error('Anket cevaplama hatası:', err);
     res.status(500).json({ error: err.message });
   }
 });

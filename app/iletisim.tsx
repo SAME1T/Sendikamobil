@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 
 const sendikalar = [
   {
@@ -57,10 +57,30 @@ const sendikalar = [
 ];
 
 export default function Iletisim() {
+  const params = useLocalSearchParams();
+  const userId = params.user_id as string;
+  const role = Number(params.role) || 1;
+
+  const handleBackPress = () => {
+    if (role === 2) {
+      // Sendikacı
+      router.push({ 
+        pathname: '/sendikaci-home', 
+        params: { user_id: userId, ad: params.ad, soyad: params.soyad, role } 
+      });
+    } else {
+      // İşçi
+      router.push({ 
+        pathname: '/isci-home', 
+        params: { user_id: userId, ad: params.ad, soyad: params.soyad, role } 
+      });
+    }
+  };
+
   return (
     <ScrollView style={styles.bg} contentContainerStyle={{paddingBottom: 32}}>
       <View style={styles.container}>
-        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+        <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
           <Ionicons name="arrow-back" size={28} color="#2575fc" />
         </TouchableOpacity>
         <View style={styles.iconCircle}>

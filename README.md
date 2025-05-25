@@ -10,7 +10,7 @@ Sendika Mobil, işçiler ve sendikacılar için geliştirilmiş bir mobil uygula
 - Anket oluşturma ve yönetme
 - Duyuru sistemi
 - Etkinlik takvimi
-- **Toplantı yönetimi (yeni!)**
+- **Toplantı yönetimi 
 - İletişim araçları
 
 ## Toplantılar Modülü (YENİ)

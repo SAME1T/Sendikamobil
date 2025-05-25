@@ -63,7 +63,10 @@ export default function SendikaciHome() {
             <View style={styles.menuIconBg}><Ionicons name="people" size={32} color="#fff" /></View>
             <Text style={styles.menuLabel}>Toplantılar</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/iletisim')}>
+          <TouchableOpacity style={styles.menuItem} onPress={() => router.push({ 
+            pathname: '/iletisim', 
+            params: { user_id: userId, ad, soyad, role } 
+          })}>
             <View style={styles.menuIconBg}><Ionicons name="call" size={32} color="#fff" /></View>
             <Text style={styles.menuLabel}>İletişim</Text>
           </TouchableOpacity>

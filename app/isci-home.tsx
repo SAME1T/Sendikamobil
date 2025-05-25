@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import AnimatedBackground from '../components/AnimatedBackground';
 import ChatBot from '../components/ChatBot';
 import SocialFeed from '../components/SocialFeed';
+import AktiflikKutusu from './components/AktiflikKutusu';
 
 const announcements = [
   { id: 1, title: 'Aidat Ödemeleri Başladı', date: '2024-06-01' },
@@ -18,11 +19,19 @@ export default function IsciHome() {
   const soyad = params.soyad || '';
   const userId = params.user_id;
   const role = Number(params.role) || 1;
+  const [aktiflikRefresh, setAktiflikRefresh] = useState(0);
   if (!userId) {
     Alert.alert('Hata', 'Kullanıcı bilgisi bulunamadı. Lütfen tekrar giriş yapın.');
     router.replace('/');
     return null;
   }
+
+  // Sayfa odaklandığında aktiflik kutusunu yenile
+  useFocusEffect(
+    React.useCallback(() => {
+      setAktiflikRefresh(prev => prev + 1);
+    }, [])
+  );
 
   const handleLogout = () => {
     Alert.alert('Çıkış Yap', 'Oturumdan çıkmak istediğinize emin misiniz?', [
@@ -40,6 +49,9 @@ export default function IsciHome() {
           <Text style={styles.name}>{ad} {soyad}</Text>
           <Text style={styles.subHeader}>Sendika İletişim Merkezi üye paneline hoş geldiniz.</Text>
         </View>
+        
+        {/* Aktiflik Puanı ve Sendika Ücreti */}
+        <AktiflikKutusu userId={userId as string} refreshTrigger={aktiflikRefresh} />
         
         {/* Sosyal Medya Feed'i */}
         <View style={styles.feedContainer}>
@@ -63,7 +75,10 @@ export default function IsciHome() {
             <View style={styles.menuIconBg}><Ionicons name="calendar" size={32} color="#fff" /></View>
             <Text style={styles.menuLabel}>Etkinlikler</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/iletisim')}>
+          <TouchableOpacity style={styles.menuItem} onPress={() => router.push({ 
+            pathname: '/iletisim', 
+            params: { user_id: userId, ad, soyad, role } 
+          })}>
             <View style={styles.menuIconBg}><Ionicons name="call" size={32} color="#fff" /></View>
             <Text style={styles.menuLabel}>İletişim</Text>
           </TouchableOpacity>
