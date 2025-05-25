@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   content: {
     padding: 20,
     alignItems: 'center',
-    paddingBottom: 60,
+    paddingBottom: 120,
     paddingTop: 40,
   },
   headerBox: {
@@ -222,7 +222,8 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 10,
+    marginTop: 30,
+    marginBottom: 40,
   },
   footerButton: {
     flexDirection: 'row',

@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 16,
+    paddingBottom: 120,
   },
   headerBox: {
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
@@ -207,9 +208,11 @@ const styles = StyleSheet.create({
   },
   footer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
+    marginTop: 30,
+    marginBottom: 40,
   },
   footerButton: {
     flexDirection: 'row',
@@ -219,6 +222,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     paddingVertical: 14,
     paddingHorizontal: 32,
+    marginHorizontal: 5,
     shadowColor: '#ff3b30',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.12,
